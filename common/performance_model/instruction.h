@@ -65,6 +65,28 @@ public:
    void setSize(UInt32 size) { m_size = size; }
    UInt32 getSize() const { return m_size; }
 
+   void setRegValue(uint64_t regvalues) {
+	   //for ( int i = 0 ; i < 50 ; i++ ) {
+	   RegValue=regvalues;
+   //}
+   }
+   void setDstReg(String regname) {
+	   regdst = regname;
+   }
+   String getDstReg() {
+	   return regdst;
+   }
+   void setDstVal(uint64_t val) {
+	   regdstvalue = val;
+   }
+   void addbbhead(uint64_t bbheadaddr) {
+	   bbhead = bbheadaddr;
+   }
+   uint64_t getbbhead() { return bbhead; }
+   uint64_t getDstVal() {
+	   return regdstvalue;
+   }
+   uint64_t getRegValue() { return RegValue; }
    void setAtomic(bool atomic) { m_atomic = atomic; }
    bool isAtomic() const { return m_atomic; }
 
@@ -76,6 +98,8 @@ public:
 
    const std::vector<const MicroOp *>* getMicroOps(void) const
    { return m_uops; }
+   void setVPeligible (bool eligible) { isVPeligible=eligible; }
+   bool getVPeligible () { return isVPeligible; }
 
 private:
    typedef std::vector<unsigned int> StaticInstructionCosts;
@@ -89,6 +113,11 @@ private:
    IntPtr m_addr;
    UInt32 m_size;
    bool m_atomic;
+   uint64_t RegValue;
+   String regdst;
+   uint64_t regdstvalue;
+   bool isVPeligible;
+   uint64_t bbhead;
 
 protected:
    OperandList m_operands;

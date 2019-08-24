@@ -28,13 +28,34 @@ void InstructionDecoder::addAddrs(std::set<xed_reg_enum_t> regs, MicroOp * curre
       }
 }
 
-void InstructionDecoder::addDsts(std::set<xed_reg_enum_t> regs, MicroOp * currentMicroOp) {
+int InstructionDecoder::addDsts(std::set<xed_reg_enum_t> regs, MicroOp * currentMicroOp, uint64_t regvalue) {
+	int numdsts = 0;
    for(std::set<xed_reg_enum_t>::iterator it = regs.begin(); it != regs.end(); ++it)
       if (*it != XED_REG_INVALID) {
+    	  numdsts++;
          xed_reg_enum_t reg = xed_get_largest_enclosing_register(*it);
          if (reg == XED_REG_EIP || reg == XED_REG_RIP) continue; // eip/rip is known at decode time, shouldn't be a dependency
-         currentMicroOp->addDestinationRegister(reg, String(xed_reg_enum_t2str(reg)));
+         int regind = 0;
+         if ( reg == XED_REG_RCX ) regind = 9;
+         if ( reg == XED_REG_RBP ) regind = 5;
+         if ( reg == XED_REG_RAX ) regind = 10;
+         if ( reg == XED_REG_RDX ) regind = 8;
+         if ( reg == XED_REG_RDI ) regind = 3;
+         if ( reg == XED_REG_RSI ) regind = 4;
+         if ( reg == XED_REG_RBX ) regind = 7;
+         if ( reg == XED_REG_RSP ) regind = 6;
+         if ( reg == XED_REG_R8 ) regind = 11;
+         if ( reg == XED_REG_R9 ) regind = 12;
+         if ( reg == XED_REG_R10 ) regind = 13;
+         if ( reg == XED_REG_R11 ) regind = 14;
+         if ( reg == XED_REG_R12 ) regind = 15;
+         if ( reg == XED_REG_R13 ) regind = 16;
+         if ( reg == XED_REG_R14 ) regind = 17;
+         if ( reg == XED_REG_R15 ) regind = 18;
+         currentMicroOp->addDestinationRegister(reg, String(xed_reg_enum_t2str(reg)), regvalue);
+         std::cout << "dst reg2: " << reg << " PC: " << std::hex << currentMicroOp->getInstruction()->getAddress() << " dst ind: " <<std::dec << regind << " ref val: " <<  std::hex << regvalue << std::dec << std::endl;
       }
+   return numdsts;
 }
 
 unsigned int InstructionDecoder::getNumExecs(const xed_decoded_inst_t *ins, int numLoads, int numStores)
@@ -284,7 +305,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address, co
             addSrcs(regs_src, currentMicroOp);
             if (numStores == 0)
                // No store microop either: we also inherit its write operands
-               addDsts(regs_dst, currentMicroOp);
+               addDsts(regs_dst, currentMicroOp, ins_ptr->getRegValue());
          }
 
       }
@@ -292,7 +313,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address, co
       else if (index < numLoads + numExecs) /* EXEC */
       {
          addSrcs(regs_src, currentMicroOp);
-         addDsts(regs_dst, currentMicroOp);
+         addDsts(regs_dst, currentMicroOp, ins_ptr->getRegValue());
 
          if (xed_decoded_inst_get_iclass(ins) == XED_ICLASS_MFENCE
             || xed_decoded_inst_get_iclass(ins) == XED_ICLASS_LFENCE
@@ -321,7 +342,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address, co
 
          if (numExecs == 0) {
             // No execute microop: we inherit its write operands
-            addDsts(regs_dst, currentMicroOp);
+            addDsts(regs_dst, currentMicroOp, ins_ptr->getRegValue());
             if (numLoads == 0)
                // No load microops either: we also inherit its read operands
                addSrcs(regs_src, currentMicroOp);

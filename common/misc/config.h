@@ -41,6 +41,17 @@ public:
       ROI_SCRIPT
    };
 
+   enum VPTYPE
+   {
+	   DISABLE,
+	   VP_SIMPLE,
+	   VP_VTAGE
+   };
+   enum UOPSTATUS
+   {
+	   UOP_DISABLE,
+	   UOP_ENABLE
+   };
    typedef std::unordered_map<UInt32,core_id_t> CommToCoreMap;
 
    Config(SimulationMode mode);
@@ -89,6 +100,13 @@ public:
    bool suppressStderr() const { return m_suppress_stderr; }
    bool getEnablePinPlay() const { return m_knob_enable_pinplay; }
    bool getEnableSyscallEmulation() const { return m_knob_enable_syscall_emulation; }
+   VPTYPE getVPtype() const { return m_VPtype; }
+   UOPSTATUS getUOPstatus() const { return m_UOPstatus; }
+   UInt32 getVPpenalty() const { return m_vp_penalty; }
+   bool getVPdebug() const { return m_VP_debug; }
+   bool getUOPdebug() const { return m_UOP_debug; }
+   bool getPINdebug() const { return m_pin_debug; }
+   bool getVPremovevpentry() const { return m_UOP_removevpentry; }
 
    bool getBBVsEnabled() const { return m_knob_bbvs; }
    void setBBVsEnabled(bool enable) { m_knob_bbvs = enable; }
@@ -115,9 +133,16 @@ private:
    SimulationMode m_simulation_mode;
 
    static Config *m_singleton;
+   VPTYPE m_VPtype;
+   UOPSTATUS m_UOPstatus;
+   bool m_VP_debug;
+   bool m_UOP_debug;
+   bool m_UOP_removevpentry;
+   bool m_pin_debug;
 
    static String m_knob_output_directory;
    static UInt32 m_knob_total_cores;
+   static UInt32 m_vp_penalty;
    static UInt32 m_knob_num_host_cores;
    static bool m_knob_enable_smc_support;
    static bool m_knob_issue_memops_at_functional;

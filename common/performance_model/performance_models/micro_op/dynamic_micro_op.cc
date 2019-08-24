@@ -13,6 +13,7 @@ DynamicMicroOp::DynamicMicroOp(const MicroOp *uop, const CoreModel *core_model, 
 
    this->branchTaken = false;
    this->branchMispredicted = false;
+   this->VPMispredicted = false;
 
    this->intraInstructionDependencies = uop->intraInstructionDependencies;
    this->microOpTypeOffset = uop->microOpTypeOffset;

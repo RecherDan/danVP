@@ -424,6 +424,8 @@ Instruction* TraceThread::decode(Sift::Instruction &inst)
    instruction->setAddress(va2pa(inst.sinst->addr));
    instruction->setSize(inst.sinst->size);
    instruction->setAtomic(dec_inst.is_atomic());
+   instruction->setRegValue(inst.reg_value);
+   instruction->setDstVal(inst.reg_value);
    char disassembly[64];
    dec_inst.disassembly_to_str(disassembly, sizeof(disassembly));  
    instruction->setDisassembly(disassembly);
@@ -656,10 +658,18 @@ void TraceThread::handleInstructionDetailed(Sift::Instruction &inst, Sift::Instr
    const dl::DecodedInst &dec_inst = *(m_decoder_cache[inst.sinst->addr]);
 
    Instruction *ins = m_icache[inst.sinst->addr];
+   ins->setDstVal(inst.reg_value);
+   ins->setVPeligible(true);
+   uint64_t bbheadtostore = inst.bbhead;
+   std::cout << "handleInstructionDetailed dst reg: " << " PC: " << std::hex << va2pa(inst.sinst->addr) << " BB head: " << bbheadtostore << " dst ind: " <<std::dec  << " ref val: " <<  std::hex << inst.reg_value << std::dec << std::endl;
    DynamicInstruction *dynins = prfmdl->createDynamicInstruction(ins, va2pa(inst.sinst->addr));
 
    // Add dynamic instruction info
 
+	   dynins->addVPInfo(inst.sinst->addr, next_inst.sinst->addr,  ins->getVPeligible(),ins->getDstVal(), ins->getDstReg(), ins->getType());
+	   //std::cout << "TST" << std::endl;
+   //}
+	   ins->addbbhead(bbheadtostore);
    if (inst.is_branch)
    {
       dynins->addBranch(inst.taken, va2pa(next_inst.sinst->addr));

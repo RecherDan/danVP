@@ -15,6 +15,7 @@ Instruction::Instruction(InstructionType type, OperandList &operands)
    , m_uops(NULL)
    , m_addr(0)
    , m_operands(operands)
+   , isVPeligible(false)
 {
 }
 
@@ -22,6 +23,7 @@ Instruction::Instruction(InstructionType type)
    : m_type(type)
    , m_uops(NULL)
    , m_addr(0)
+   , isVPeligible(false)
 {
 }
 

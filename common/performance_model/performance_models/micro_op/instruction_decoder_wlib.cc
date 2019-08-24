@@ -33,15 +33,42 @@ void InstructionDecoder::addAddrs(std::set<dl::Decoder::decoder_reg> regs, Micro
       }
 }
 
-void InstructionDecoder::addDsts(std::set<dl::Decoder::decoder_reg> regs, MicroOp * currentMicroOp) {
+int InstructionDecoder::addDsts(std::set<dl::Decoder::decoder_reg> regs, MicroOp * currentMicroOp, uint64_t regvalue) {
    dl::Decoder *dec = Sim()->getDecoder();
 
+   int numdsts = 0;
    for(std::set<dl::Decoder::decoder_reg>::iterator it = regs.begin(); it != regs.end(); ++it)
       if (!(dec->invalid_register(*it))) {
+    	  numdsts++;
          dl::Decoder::decoder_reg reg = dec->largest_enclosing_register(*it);
          if (dec->reg_is_program_counter(reg)) continue; // eip/rip is known at decode time, shouldn't be a dependency
-         currentMicroOp->addDestinationRegister(reg, String(dec->reg_name(reg)));
+         uint64_t regval;
+         String regname = String(dec->reg_name(reg));
+         int regind = 0;
+         if ( !regname.compare("RCX") ) regind = 9;
+         if ( !regname.compare("RBP") ) regind = 5;
+         if ( !regname.compare("RAX") ) regind = 10;
+         if ( !regname.compare("RDX") ) regind = 8;
+         if ( !regname.compare("RDI") ) regind = 3;
+         if ( !regname.compare("RSI") ) regind = 4;
+         if ( !regname.compare("RBX") ) regind = 7;
+         if ( !regname.compare("RSP") ) regind = 6;
+         if ( !regname.compare("R8") ) regind = 11;
+         if ( !regname.compare("R9") ) regind = 12;
+         if ( !regname.compare("R10") ) regind = 13;
+         if ( !regname.compare("R11") ) regind = 14;
+         if ( !regname.compare("R12") ) regind = 15;
+         if ( !regname.compare("R13") ) regind = 16;
+         if ( !regname.compare("R14") ) regind = 17;
+         if ( !regname.compare("R15") ) regind = 18;
+         //if ( regind == 17 || regind==18 ) {
+             std::cout << "dst reg: " << String(dec->reg_name(reg)) << " PC: " << std::hex << currentMicroOp->getInstruction()->getAddress() << " dst ind: " <<std::dec << regind << " ref val: " <<  std::hex << regvalue << std::dec << std::endl;
+         //}
+         //std::cout << "dst reg: " << String(dec->reg_name(reg)) << " dst ind: " << regind << " ref val: " <<  regvalue[regind] << std::endl;
+         currentMicroOp->addDestinationRegister(reg, String(dec->reg_name(reg)),regvalue );
+         currentMicroOp->instruction->setDstReg(String(dec->reg_name(reg)));
       }
+    return numdsts;
 }
 
 unsigned int InstructionDecoder::getNumExecs(const dl::DecodedInst *ins, int numLoads, int numStores)
@@ -66,6 +93,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address,  c
    int numLoads = 0;
    int numExecs = 0;
    int numStores = 0;
+   int numDsts = 0;
 
    // Ignore memory-referencing operands in NOP instructions
    if (!(ins->is_nop()))
@@ -207,7 +235,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address,  c
             addSrcs(regs_src, currentMicroOp);
             if (numStores == 0)
                // No store microop either: we also inherit its write operands
-               addDsts(regs_dst, currentMicroOp);
+            	numDsts+=addDsts(regs_dst, currentMicroOp, ins_ptr->getRegValue());
          }
 
       }
@@ -215,7 +243,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address,  c
       else if (index < numLoads + numExecs) /* EXEC */
       {      
          addSrcs(regs_src, currentMicroOp);
-         addDsts(regs_dst, currentMicroOp);
+         numDsts+=addDsts(regs_dst, currentMicroOp, ins_ptr->getRegValue());
 
          if (ins->is_barrier())
             currentMicroOp->setMemBarrier(true);
@@ -236,7 +264,7 @@ const std::vector<const MicroOp*>* InstructionDecoder::decode(IntPtr address,  c
 
          if (numExecs == 0) {
             // No execute microop: we inherit its write operands
-            addDsts(regs_dst, currentMicroOp);
+        	 numDsts+=addDsts(regs_dst, currentMicroOp, ins_ptr->getRegValue());
             if (numLoads == 0)
                // No load microops either: we also inherit its read operands
                addSrcs(regs_src, currentMicroOp);

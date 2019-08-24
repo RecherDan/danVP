@@ -136,7 +136,7 @@ void MagicServer::disablePerformance()
    UInt64 ninstrs = getGlobalInstructionCount() - ninstrs_start;
    UInt64 cycles = SubsecondTime::divideRounded(Sim()->getClockSkewMinimizationServer()->getGlobalTime(),
                                                 Sim()->getCoreManager()->getCoreFromID(0)->getDvfsDomain()->getPeriod());
-   printf("[SNIPER] Simulated %.1fM instructions, %.1fM cycles, %.2f IPC\n",
+   printf("[SNIPER] Simulated %.1fM instructions, %.9fM cycles, %.2f IPC\n",
       ninstrs / 1e6,
       cycles / 1e6,
       float(ninstrs) / (cycles ? cycles : 1));

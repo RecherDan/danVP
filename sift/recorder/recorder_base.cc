@@ -34,7 +34,7 @@ VOID countInsns(THREADID threadid, INT32 count)
    }
 }
 
-VOID sendInstruction(THREADID threadid, ADDRINT addr, UINT32 size, UINT32 num_addresses, BOOL is_branch, BOOL taken, BOOL is_predicate, BOOL executing, BOOL isbefore, BOOL ispause)
+VOID sendInstruction(THREADID threadid, ADDRINT addr, UINT32 size, UINT32 num_addresses, BOOL is_branch, BOOL taken, BOOL is_predicate, BOOL executing, BOOL isbefore, BOOL ispause, const CONTEXT * ctxt, UINT32 dstreg, uint64_t dstregval/*, bool ISR14WRITE, bool ISR15WRITE, UINT32 R14VAL, UINT32 R15VAL */, ADDRINT bbhead)
 {
    // We're still called for instructions in the same basic block as ROI end, ignore these
    if (!thread_data[threadid].output)
@@ -72,7 +72,57 @@ VOID sendInstruction(THREADID threadid, ADDRINT addr, UINT32 size, UINT32 num_ad
       }
    }
 
-   thread_data[threadid].output->Instruction(addr, size, num_addresses, thread_data[threadid].dyn_addresses, is_branch, taken, is_predicate, executing);
+#ifdef VPDEBUG
+   std::cout << "sendInstruction PC: " << std::hex << addr << " reg: " << std::dec << dstreg << " val: " << std::hex << dstregval << std::endl;
+#endif
+   //if ( (R14VAL == 0x1212 || R14VAL == 0x1213 )  && ISR14WRITE )
+//	   std::cout << "R14 WRITE PC: " << std::hex << addr << " R14: " << R14VAL << " tst(" << std::dec << (int)REG_R14 << "): " << std::hex << dstval[(int)REG_R14] << std::dec << std::endl;
+ //  if (  (R15VAL == 0x1212 || R15VAL == 0x1213 ) && ISR15WRITE )
+	//   std::cout << "R15 WRITE PC: " << std::hex << addr << " R15: " << R15VAL << " tst(" << std::dec  << (int)REG_R15 << "): " << std::hex << dstval[(int)REG_R15] <<  std::dec << std::endl;
+   /*
+   std::cout << "RCX: " << (int)REG_RCX << std::endl;
+   std::cout << "RBP: " << (int)REG_RBP << std::endl;
+   std::cout << "RAX: " << (int)REG_RAX << std::endl;
+   std::cout << "RDX: " << (int)REG_RDX << std::endl;
+   std::cout << "RDI: " << (int)REG_RDI << std::endl;
+   std::cout << "RSI: " << (int)REG_RSI << std::endl;
+   std::cout << "RBX: " << (int)REG_RBX << std::endl;
+   std::cout << "RSP: " << (int)REG_RSP << std::endl;
+   std::cout << "R8: " << (int)REG_R8 << std::endl;
+   std::cout << "R8: " << (int)REG_R15 << std::endl;
+   */
+   /*
+   dstval[0] = PIN_GetContextReg(ctxt, REG_RCX); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[1] = PIN_GetContextReg(ctxt, REG_RBP); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[2] = PIN_GetContextReg(ctxt, REG_RAX); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[3] = PIN_GetContextReg(ctxt, REG_RDX); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[4] = PIN_GetContextReg(ctxt, REG_RDI); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[5] = PIN_GetContextReg(ctxt, REG_RSI); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[6] = PIN_GetContextReg(ctxt, REG_RBX); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[7] = PIN_GetContextReg(ctxt, REG_RSP); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[8] = PIN_GetContextReg(ctxt, REG_R8); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[9] = PIN_GetContextReg(ctxt, REG_R9); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[10] = PIN_GetContextReg(ctxt, REG_R10); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[11] = PIN_GetContextReg(ctxt, REG_R11); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[12] = PIN_GetContextReg(ctxt, REG_R12); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[13] = PIN_GetContextReg(ctxt, REG_R13); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[14] = PIN_GetContextReg(ctxt, REG_R14); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   dstval[15] = PIN_GetContextReg(ctxt, REG_R15); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   */
+   //std::cout << "PV: " << addr <<  " RAX val: " << std::hex << dstval[(int)REG_RAX] << std::endl;
+   //dstval[16] = PIN_GetContextReg(ctxt, REG_ZMM0); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[17] = PIN_GetContextReg(ctxt, REG_ZMM1); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[18] = PIN_GetContextReg(ctxt, REG_ZMM2); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[19] = PIN_GetContextReg(ctxt, REG_ZMM3); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[20] = PIN_GetContextReg(ctxt, REG_ZMM4); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[21] = PIN_GetContextReg(ctxt, REG_ZMM5); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[22] = PIN_GetContextReg(ctxt, REG_ZMM6); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[23] = PIN_GetContextReg(ctxt, REG_ZMM7); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[24] = PIN_GetContextReg(ctxt, REG_ZMM8); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+   //dstval[25] = PIN_GetContextReg(ctxt, REG_ZMM9); // TODO: make array of registers and save all values - then in micro_op get the relevant value.
+	  std::cout << "recorder base: TST: pc: " << std::hex << addr << " HEAD: " << thread_data[threadid].bbv_base << std::dec << std::endl;
+
+   thread_data[threadid].output->Instruction(addr, size, num_addresses, thread_data[threadid].dyn_addresses, is_branch, taken, is_predicate, executing, dstregval, 11, thread_data[threadid].bbv_base);
    thread_data[threadid].num_dyn_addresses = 0;
 
    if (KnobUseResponseFiles.Value() && KnobFlowControl.Value() && (thread_data[threadid].icount > thread_data[threadid].flowcontrol_target || ispause))
@@ -169,8 +219,16 @@ UINT32 addMemoryModeling(INS ins)
    return num_addresses;
 }
 
-VOID insertCall(INS ins, IPOINT ipoint, UINT32 num_addresses, BOOL is_branch, BOOL taken)
+VOID insertCall(INS ins, IPOINT ipoint, UINT32 num_addresses, BOOL is_branch, BOOL taken, INS bbhead)
 {
+	#ifdef VPDEBUG
+		if ( INS_RegW(ins, 0) == REG_R14D ) {
+			std::cout << std::hex << INS_Address(ins) << ": R14 disasembly " << std::dec << INS_Disassemble(ins) << std::endl;
+		}
+		if ( INS_RegW(ins, 0) == REG_R15D ) {
+			std::cout << std::hex << INS_Address(ins) << ": R15 disasembly " << std::dec <<  INS_Disassemble(ins) << std::endl;
+		}
+	#endif
    INS_InsertCall(ins, ipoint,
       AFUNPTR(sendInstruction),
       IARG_THREAD_ID,
@@ -183,6 +241,15 @@ VOID insertCall(INS ins, IPOINT ipoint, UINT32 num_addresses, BOOL is_branch, BO
       IARG_EXECUTING,
       IARG_BOOL, ipoint == IPOINT_BEFORE,
       IARG_BOOL, INS_Opcode(ins) == XED_ICLASS_PAUSE,
+	  IARG_CONTEXT,
+	  IARG_UINT32, INS_RegW(ins, 0),
+	  IARG_REG_VALUE, ( (INS_RegW(ins, 0) != REG_INVALID_) && (INS_RegW(ins,0) < REG_XMM0)) ? INS_RegW(ins, 0) : REG_R14D,
+	  /*
+	  IARG_BOOL, INS_RegW(ins, 0) == REG_R14D,
+	  IARG_BOOL, INS_RegW(ins, 0) == REG_R15D,
+	  IARG_REG_VALUE, REG_R14D,
+	  IARG_REG_VALUE, REG_R15D,*/
+	  IARG_ADDRINT, INS_Address(bbhead),
       IARG_END);
 }
 
@@ -247,14 +314,14 @@ static VOID traceCallback(TRACE trace, void *v)
 
             if (is_branch)
             {
-               insertCall(ins, IPOINT_AFTER,        num_addresses, true  /* is_branch */, false /* taken */);
-               insertCall(ins, IPOINT_TAKEN_BRANCH, num_addresses, true  /* is_branch */, true  /* taken */);
+               insertCall(ins, IPOINT_AFTER,        num_addresses, true  /* is_branch */, false /* taken */, BBL_InsHead(bbl));
+               insertCall(ins, IPOINT_TAKEN_BRANCH, num_addresses, true  /* is_branch */, true  /* taken */, BBL_InsHead(bbl));
             }
             else
             {
                // Whenever possible, use IPOINT_AFTER as this allows us to process addresses after the application has used them.
                // This ensures that their logical to physical mapping has been set up.
-               insertCall(ins, INS_HasFallThrough(ins) ? IPOINT_AFTER : IPOINT_BEFORE, num_addresses, false /* is_branch */, false /* taken */);
+               insertCall(ins, INS_HasFallThrough(ins) ? IPOINT_AFTER : IPOINT_BEFORE, num_addresses, false /* is_branch */, false /* taken */, BBL_InsHead(bbl));
             }
 
             if (ins == BBL_InsTail(bbl))

@@ -11,6 +11,7 @@ class ClockSkewMinimizationClient;
 class ShmemPerfModel;
 class TopologyInfo;
 class CheetahManager;
+class ValuePrediction;
 
 #include "mem_component.h"
 #include "fixed_types.h"
@@ -20,6 +21,21 @@ class CheetahManager;
 #include "bbv_count.h"
 #include "cpuid.h"
 #include "hit_where.h"
+#include "VP.h"
+#include "uopcache.h"
+
+enum InstClass : unsigned short
+{
+  aluInstClass = 0,
+  loadInstClass = 1,
+  storeInstClass = 2,
+  condBranchInstClass = 3,
+  uncondDirectBranchInstClass = 4,
+  uncondIndirectBranchInstClass = 5,
+  fpInstClass = 6,
+  slowAluInstClass = 7,
+  undefInstClass = 8
+};
 
 struct MemoryResult {
    HitWhere::where_t hit_where;
@@ -114,6 +130,8 @@ class Core
       const TopologyInfo* getTopologyInfo() const { return m_topology_info; }
       const CheetahManager* getCheetahManager() const { return m_cheetah_manager; }
 
+      ValuePrediction* getValuePrediction() { return valueprediction; }
+      UopCache* getUopCache() { return uopcache; }
       State getState() const { return m_core_state; }
       void setState(State core_state) { m_core_state = core_state; }
       UInt64 getInstructionCount() { return m_instructions; }
@@ -147,6 +165,8 @@ class Core
       TopologyInfo *m_topology_info;
       CheetahManager *m_cheetah_manager;
 
+      ValuePrediction *valueprediction;
+      UopCache *uopcache;
       State m_core_state;
 
       static Lock m_global_core_lock;

@@ -13,6 +13,8 @@
 #include "core_model.h"
 #include "rob_contention.h"
 #include "instruction.h"
+#include "uopcache.h"
+#include "VP.h"
 
 #include <iostream>
 #include <sstream>
@@ -171,6 +173,8 @@ RobTimer::RobTimer(
       }
    }
 
+valueprediction = core->getValuePrediction();
+uopcache = core->getUopCache();
 }
 
 RobTimer::~RobTimer()
@@ -290,7 +294,10 @@ boost::tuple<uint64_t,SubsecondTime> RobTimer::simulate(const std::vector<Dynami
       this->registerDependencies->setDependencies(*entry->uop, lowestValidSequenceNumber);
       this->memoryDependencies->setDependencies(*entry->uop, lowestValidSequenceNumber);
 
-      if (m_store_to_load_forwarding && entry->uop->getMicroOp()->isLoad())
+	  this->danount++;
+     
+//if (m_store_to_load_forwarding && entry->uop->getMicroOp()->isLoad())
+      if ((m_store_to_load_forwarding && entry->uop->getMicroOp()->isLoad()) || (entry->uop->isVPGoodpredicted() && false))
       {
          for(unsigned int i = 0; i < entry->uop->getDependenciesLength(); ++i)
          {
@@ -312,6 +319,13 @@ boost::tuple<uint64_t,SubsecondTime> RobTimer::simulate(const std::vector<Dynami
          }
       }
 
+      if ( entry->uop->isVPGoodpredicted() ) {
+    	  std::cout << "good predicted! should remove dependencies " << random()%10 << std::endl;
+		 for(unsigned int i = 0; i < entry->uop->getDependenciesLength(); ++i)
+		  {
+			  entry->uop->removeDependency(entry->uop->getDependency(i));
+		  }
+      }
       // Add ourselves to the dependants list of the uops we depend on
       uint64_t minProducerDistance = UINT64_MAX;
       m_totalConsumers += 1 ;
@@ -501,6 +515,12 @@ SubsecondTime RobTimer::doDispatch(SubsecondTime **cpiComponent)
 
          // If uop is already ready, we may need to issue it in the following cycle
          entry->ready = std::max(entry->ready, (now + 1ul).getElapsedTime());
+        /* if ( uop.isUOPpredicted() ) {
+        	 std::cout << "RobTimer::doDispatch uop is predicted! calculate: ready " << std::dec << entry->ready  << " now: " << (now + 1ul).getElapsedTime() << std::endl;
+        	 SubsecondTime gain = (entry->ready - (now + 1ul).getElapsedTime());
+        	 std::cout << "RobTimer::doDispatch uop is predicted! we saved: " << std::dec << gain << std::endl;
+        	 entry->ready = (now + 1ul).getElapsedTime();
+         }*/
          next_event = std::min(next_event, entry->ready);
 
          #ifdef DEBUG_PERCYCLE
@@ -619,8 +639,10 @@ void RobTimer::issueInstruction(uint64_t idx, SubsecondTime &next_event)
       // Dependent operations such as SFENCE and synchronization instructions need to wait until last_store_done
       cycle_done = now + 1ul;
 
+	   if ( false && !uopcache->isUopCacheValid() ) {
       LOG_ASSERT_ERROR(entry->addressReady <= entry->ready, "%ld: Store address cannot be ready (%ld) later than the whole uop is (%ld)",
                        entry->uop->getSequenceNumber(), entry->addressReady.getPS(), entry->ready.getPS());
+	   }
    }
 
    if (m_rob_contention)
@@ -684,6 +706,10 @@ void RobTimer::issueInstruction(uint64_t idx, SubsecondTime &next_event)
       }
    }
 
+   if (  uop.isVPMispredicted() ) {
+	   std::cout<<"misprediction penalty!"<<std::endl;
+	    frontend_stalled_until = now + (uop.getVPMispredictitonPenalty()) ;
+   }
    // After issuing a mispredicted branch: allow the ROB to refill after flushing the pipeline
    if (uop.getMicroOp()->isBranch() && uop.isBranchMispredicted())
    {

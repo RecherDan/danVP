@@ -102,6 +102,8 @@ Core::Core(SInt32 id)
          this, m_network, m_shmem_perf_model);
 
    m_performance_model = PerformanceModel::create(this);
+   valueprediction = new ValuePrediction(this);
+   uopcache = new UopCache();
 }
 
 Core::~Core()

@@ -519,6 +519,9 @@ bool Sift::Reader::Read(Instruction &inst)
          inst.is_predicate = false;
          inst.executed = true;
          inst.isa = m_isa;
+        	 inst.reg_value = rec.Instruction.regvalue;
+        	 inst.bbhead = rec.Instruction.bbhead;
+       	  std::cout << "sift_reader1: TST: pc: " << std::hex << addr << " HEAD: " <<  inst.bbhead << std::dec << std::endl;
       }
       else
       {
@@ -537,6 +540,8 @@ bool Sift::Reader::Read(Instruction &inst)
          inst.is_predicate = rec.InstructionExt.is_predicate;
          inst.executed = rec.InstructionExt.executed;
          inst.isa = m_isa;
+         inst.bbhead = addr;
+      	  std::cout << "sift_reader2: TST: pc: " << std::hex << addr << " HEAD: " <<  inst.bbhead << std::dec << std::endl;
 
          last_address = addr;
       }

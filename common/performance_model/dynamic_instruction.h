@@ -5,9 +5,11 @@
 #include "subsecond_time.h"
 #include "hit_where.h"
 #include "allocator.h"
+#include "VP.h"
+#include "instruction.h"
 
 class Core;
-class Instruction;
+//class Instruction;
 
 class DynamicInstruction
 {
@@ -27,6 +29,17 @@ class DynamicInstruction
          bool taken;
          IntPtr target;
       };
+      struct VPInfo
+      {
+    	 bool isEligible;
+    	 UInt64 PC;
+    	 UInt64 NextPC;
+         bool is_VP_producer;
+         UInt64 value;
+         String regname;
+         InstructionType type;
+         String TypeName;
+      };
       struct MemoryInfo {
          bool executed; // For CMOV: true if executed
          Operand::Direction dir;
@@ -41,6 +54,7 @@ class DynamicInstruction
       Instruction* instruction;
       IntPtr eip; // Can be physical address, so different from instruction->getAddress() which is always virtual
       BranchInfo branch_info;
+      VPInfo vpinfo;
       UInt8 num_memory;
       MemoryInfo memory_info[MAX_MEMORY];
 
@@ -74,6 +88,16 @@ class DynamicInstruction
          num_memory++;
       }
 
+      void addVPInfo(IntPtr PC, IntPtr NextPC, bool vpEligible, uint64_t value, String regname, InstructionType Type)
+      {
+    	  vpinfo.PC = PC;
+    	  vpinfo.NextPC= NextPC;
+    	  vpinfo.type = Type;
+    	  vpinfo.isEligible = vpEligible;
+    	  vpinfo.value = value;
+    	  vpinfo.regname = regname;
+    	  vpinfo.TypeName = this->instruction->getTypeName();
+      }
       void addBranch(bool taken, IntPtr target)
       {
          branch_info.is_branch = true;
@@ -82,6 +106,8 @@ class DynamicInstruction
       }
 
       SubsecondTime getBranchCost(Core *core, bool *p_is_mispredict = NULL);
+      SubsecondTime getVPCost(Core *core, bool *p_is_mispredict, bool *is_GoodPredicted);
+      SubsecondTime getUopCache(Core *core, bool *is_uopispredicted = NULL);
       void accessMemory(Core *core);
 };
 

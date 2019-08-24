@@ -45,6 +45,7 @@ MicroOp::MicroOp()
    this->serializing = false;
 
    this->branch = false;
+   this->VpProducer = false;
 
    this->m_membar = false;
    this->is_x87 = false;
@@ -81,6 +82,7 @@ void MicroOp::makeLoad(uint32_t offset, dl::Decoder::decoder_opcode instructionO
    this->instructionOpcode = instructionOpcode;
    this->intraInstructionDependencies = 0;
    this->setTypes();
+	this->VpProducer = true;
 }
 
 void MicroOp::makeExecute(uint32_t offset, uint32_t num_loads, dl::Decoder::decoder_opcode instructionOpcode, const String& instructionOpcodeName, bool isBranch) {
@@ -93,6 +95,7 @@ void MicroOp::makeExecute(uint32_t offset, uint32_t num_loads, dl::Decoder::deco
 #endif
    this->branch = isBranch;
    this->setTypes();
+	this->VpProducer = true;
 }
 
 void MicroOp::makeStore(uint32_t offset, uint32_t num_execute, dl::Decoder::decoder_opcode instructionOpcode, const String& instructionOpcodeName, uint16_t mem_size) {
@@ -105,6 +108,7 @@ void MicroOp::makeStore(uint32_t offset, uint32_t num_execute, dl::Decoder::deco
    this->instructionOpcode = instructionOpcode;
    this->intraInstructionDependencies = num_execute;
    this->setTypes();
+	this->VpProducer = true;
 }
 
 void MicroOp::makeDynamic(const String& instructionOpcodeName, uint32_t execLatency) {
@@ -289,11 +293,12 @@ const String& MicroOp::getDestinationRegisterName(uint32_t index) const {
 }
 #endif
 
-void MicroOp::addDestinationRegister(dl::Decoder::decoder_reg registerId, const String& registerName) {
+void MicroOp::addDestinationRegister(dl::Decoder::decoder_reg registerId, const String& registerName, uint64_t regVal) {
    VERIFY_MICROOP();
    assert(destinationRegistersLength < MAXIMUM_NUMBER_OF_DESTINATION_REGISTERS);
 // assert(registerId >= 0 && registerId < TOTAL_NUM_REGISTERS);
    destinationRegisters[destinationRegistersLength] = registerId;
+   destinationRegistersValue[destinationRegistersLength] = regVal;
 #ifdef ENABLE_MICROOP_STRINGS
    destinationRegisterNames[destinationRegistersLength] = registerName;
 #endif

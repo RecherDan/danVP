@@ -105,6 +105,7 @@ struct MicroOp
    uint32_t destinationRegistersLength;
    /** This array contains the registers written by this MicroOperation, the integer is an id given by libdisasm64. Only valid for UOP_EXECUTE. */
    dl::Decoder::decoder_reg destinationRegisters[MAXIMUM_NUMBER_OF_DESTINATION_REGISTERS];
+   uint64_t destinationRegistersValue[MAXIMUM_NUMBER_OF_DESTINATION_REGISTERS];
 
 #ifdef ENABLE_MICROOP_STRINGS
    std::vector<String> sourceRegisterNames;
@@ -123,6 +124,8 @@ struct MicroOp
    /** Is this instruction a branch ? */
    bool branch;
 
+   bool VpProducer;
+   bool isVPEligible;
    /** Debug info about the microOperation. */
 #ifdef ENABLE_MICROOP_STRINGS
    String debugInfo;
@@ -178,7 +181,8 @@ struct MicroOp
 
    uint32_t getDestinationRegistersLength() const;
    dl::Decoder::decoder_reg getDestinationRegister(uint32_t index) const;
-   void addDestinationRegister(dl::Decoder::decoder_reg registerId, const String& registerName);
+   void addDestinationRegister(dl::Decoder::decoder_reg registerId, const String& registerName, uint64_t regVal);
+   uint64_t getDestinationRegisterValue(uint32_t index) { return destinationRegistersValue[index]; }
 
 #ifdef ENABLE_MICROOP_STRINGS
    const String& getSourceRegisterName(uint32_t index) const;
@@ -190,6 +194,7 @@ struct MicroOp
    void setInstructionPointer(const Memory::Access& ip) { this->instructionPointer = ip; }
 
    bool isBranch() const { return this->branch; }
+   bool isVpProducer() const { return this->VpProducer; }
 
    bool isInterrupt() const { return this->interrupt; }
    void setInterrupt(bool interrupt) { this->interrupt = interrupt; }

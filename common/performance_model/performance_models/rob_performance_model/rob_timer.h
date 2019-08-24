@@ -8,6 +8,8 @@
 #include "interval_timer.h"
 #include "rob_contention.h"
 #include "stats.h"
+#include "uopcache.h"
+#include "VP.h"
 
 #include <deque>
 
@@ -58,6 +60,9 @@ private:
 
    typedef CircularQueue<RobEntry> Rob;
    Rob rob;
+   UopCache *uopcache;
+   ValuePrediction *valueprediction;
+   uint64_t danount;
    uint64_t m_num_in_rob;
    uint64_t m_rs_entries_used;
    RobContention *m_rob_contention;

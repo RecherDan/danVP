@@ -83,7 +83,7 @@ void FrontendCallbacks <T>::sendInstruction(threadid_t threadid, addr_t addr, ui
   }*/
   
   FrontendCallbacks<T>::__sendInstructionSpecialized(threadid, num_addresses, isbefore);
-  m_thread_data[threadid].output->Instruction(addr, size, num_addresses, m_thread_data[threadid].dyn_addresses, is_branch, taken, is_predicate, executing);
+  m_thread_data[threadid].output->Instruction(addr, size, num_addresses, m_thread_data[threadid].dyn_addresses, is_branch, taken, is_predicate, executing, 0, 0, m_thread_data[threadid].bbv_base);
   //std::cerr << threadid << "  Instruction sent" << std::endl;
   m_thread_data[threadid].num_dyn_addresses = 0;
     

@@ -47,6 +47,10 @@ class DynamicMicroOp
       bool branchTaken;
       /** Is branch mispredicted ? Only for UOP_EXECUTE and branches. */
       bool branchMispredicted;
+      bool VPMispredicted;
+      bool is_uopispredicted;
+      bool VPisGoodpredicted;
+	  SubsecondTime VPMispredictionPenalty;
       /** Branch target address */
       IntPtr branchTargetAddress;
 
@@ -115,6 +119,14 @@ class DynamicMicroOp
       void setBranchTaken(bool _branch_taken) { LOG_ASSERT_ERROR(m_uop->isBranch(), "Expected a branch instruction."); branchTaken = _branch_taken; }
       bool isBranchMispredicted() const { LOG_ASSERT_ERROR(m_uop->isBranch(), "Expected a branch instruction."); return this->branchMispredicted; }
       void setBranchMispredicted(bool mispredicted) { this->branchMispredicted = mispredicted; }
+      bool isVPMispredicted() const { return this->VPMispredicted; }
+      bool isVPGoodpredicted() const { return this->VPisGoodpredicted; }
+      void setVPMispredicted(bool mispredicted) { this->VPMispredicted = mispredicted; }
+      void setUOPpredicted(bool is_uopispredicted) { this->is_uopispredicted = is_uopispredicted; }
+      bool isUOPpredicted() { return this->is_uopispredicted; }
+      void setVPisGoodPredicted(bool isGoodPredicted) { this->VPisGoodpredicted = isGoodPredicted; }
+	  void setVPMispredictitonPenalty(SubsecondTime penalty) { this->VPMispredictionPenalty = penalty; }
+	  SubsecondTime getVPMispredictitonPenalty() { return this->VPMispredictionPenalty; }
       IntPtr getBranchTarget() const { LOG_ASSERT_ERROR(m_uop->isBranch(), "Expected a branch instruction."); return this->branchTargetAddress; }
       void setBranchTarget(IntPtr address) { this->branchTargetAddress = address; }
 

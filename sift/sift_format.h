@@ -59,6 +59,8 @@ namespace Sift
          uint8_t is_branch:1;
          uint8_t taken:1;
          uint64_t addresses[];
+         uint64_t regvalue;
+         uint64_t bbhead;
       } __attribute__ ((__packed__)) Instruction;
 
       // Extended format for all instructions

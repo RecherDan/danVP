@@ -17,7 +17,7 @@ class InstructionDecoder {
 private:
    static void addSrcs(std::set<xed_reg_enum_t> regs, MicroOp *uop);
    static void addAddrs(std::set<xed_reg_enum_t> regs, MicroOp *uop);
-   static void addDsts(std::set<xed_reg_enum_t> regs, MicroOp *uop);
+   static int addDsts(std::set<xed_reg_enum_t> regs, MicroOp *uop, uint64_t regvalue);
    static unsigned int getNumExecs(const xed_decoded_inst_t *ins, int numLoads, int numStores);
 public:
    static const std::vector<const MicroOp*>* decode(IntPtr address, const xed_decoded_inst_t *ins, Instruction *ins_ptr);

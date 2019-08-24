@@ -47,7 +47,7 @@ namespace Sift
          Writer(const char *filename, GetCodeFunc getCodeFunc, bool useCompression = false, const char *response_filename = "", uint32_t id = 0, bool arch32 = false, bool requires_icache_per_insn = false, bool send_va2pa_mapping = false, GetCodeFunc2 getCodeFunc2 = NULL, void *GetCodeFunc2Data = NULL);
          ~Writer();
          void End();
-         void Instruction(uint64_t addr, uint8_t size, uint8_t num_addresses, uint64_t addresses[], bool is_branch, bool taken, bool is_predicate, bool executed);
+         void Instruction(uint64_t addr, uint8_t size, uint8_t num_addresses, uint64_t addresses[], bool is_branch, bool taken, bool is_predicate, bool executed, uint64_t dstval, int dstsize, uint64_t bbhead);
          Mode InstructionCount(uint32_t icount);
          void CacheOnly(uint8_t icount, CacheOnlyType type, uint64_t eip, uint64_t address);
          void Output(uint8_t fd, const char *data, uint32_t size);

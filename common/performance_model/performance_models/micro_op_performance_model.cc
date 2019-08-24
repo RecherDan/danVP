@@ -181,8 +181,19 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
    size_t load_base_index = SIZE_MAX;
    // Find the first store
    size_t store_base_index = SIZE_MAX;
+	 bool is_vpmispredicted = false;
+	 bool is_GoodPredicted = false;
+	 bool is_uopispredicted = false;
+	 SubsecondTime VPpenalty = dynins->getVPCost(getCore(), &is_vpmispredicted, &is_GoodPredicted);
+	 SubsecondTime UopMispredictPenalty = dynins->getUopCache(getCore(), &is_uopispredicted);
    for (size_t m = 0 ; m < m_current_uops.size() ; m++ )
    {
+		 m_current_uops[m]->setVPMispredicted(is_vpmispredicted);
+		 m_current_uops[m]->setUOPpredicted(is_uopispredicted);
+		 //if ( m_current_uops[m]->isVPMispredicted() )
+			// std::cout << "mispredict: " << is_vpmispredicted << " good_prediction: " << is_GoodPredicted << std::endl;
+		 m_current_uops[m]->setVPisGoodPredicted(is_GoodPredicted);
+		 m_current_uops[m]->setVPMispredictitonPenalty(VPpenalty);
       if (m_current_uops[m]->getMicroOp()->isExecute())
       {
          exec_base_index = m;
@@ -338,6 +349,13 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 
    SubsecondTime insn_cost = SubsecondTime::Zero();
 
+   if (dynins->instruction->getType() == INST_BRANCH)
+   {
+	bool is_vpmispredicted = false;
+	bool is_goodpredicted = false;
+	m_current_uops[exec_base_index]->setVPMispredictitonPenalty(dynins->getVPCost(getCore(), &is_vpmispredicted, &is_goodpredicted));
+	m_current_uops[exec_base_index]->setVPMispredicted(is_vpmispredicted);
+   }
    if (dynins->instruction->getType() == INST_BRANCH)
    {
       bool is_mispredict;

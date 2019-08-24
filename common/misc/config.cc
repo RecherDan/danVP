@@ -23,6 +23,7 @@ bool Config::m_knob_enable_sync;
 bool Config::m_knob_enable_sync_report;
 bool Config::m_knob_osemu_pthread_replace;
 UInt32 Config::m_knob_osemu_nprocs;
+UInt32 Config::m_vp_penalty;
 bool Config::m_knob_osemu_clock_replace;
 time_t Config::m_knob_osemu_time_start;
 bool Config::m_knob_bbvs;
@@ -108,6 +109,13 @@ Config::Config(SimulationMode mode)
 
    m_circular_log_enabled = Sim()->getCfg()->getBool("log/circular_log");
 
+   m_VPtype = (Sim()->getCfg()->getString("VP/type").compare("VP_SIMPLE") == 0 ) ? VP_SIMPLE : ((Sim()->getCfg()->getString("VP/type").compare("VP_VTAGE") == 0 ) ? VP_VTAGE : DISABLE);
+   m_UOPstatus = (Sim()->getCfg()->getString("uopcache/status").compare("ENABLE") == 0 ) ? UOP_ENABLE : UOP_DISABLE;
+   m_vp_penalty =  Sim()->getCfg()->getInt("VP/misspenalty");
+   m_VP_debug = Sim()->getCfg()->getBool("VP/debug");
+   m_UOP_debug = Sim()->getCfg()->getBool("uopcache/debug");
+   m_UOP_removevpentry = Sim()->getCfg()->getBool("uopcache/removevpentry");
+   m_pin_debug = Sim()->getCfg()->getBool("pinaddons/debug");
    m_knob_enable_pinplay = Sim()->getCfg()->getBool("general/enable_pinplay");
    m_knob_enable_syscall_emulation = !m_knob_enable_pinplay && Sim()->getCfg()->getBool("general/enable_syscall_emulation");
 

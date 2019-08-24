@@ -170,8 +170,9 @@ Sift::Writer::~Writer()
    #endif
 }
 
-void Sift::Writer::Instruction(uint64_t addr, uint8_t size, uint8_t num_addresses, uint64_t addresses[], bool is_branch, bool taken, bool is_predicate, bool executed)
+void Sift::Writer::Instruction(uint64_t addr, uint8_t size, uint8_t num_addresses, uint64_t addresses[], bool is_branch, bool taken, bool is_predicate, bool executed, uint64_t dstval, int dstsize, uint64_t bbhead)
 {
+	  std::cout << "sift_writer1: TST: pc: " << std::hex << addr << " HEAD: " << bbhead << std::dec << std::endl;
    sift_assert(size < 16);
    sift_assert(num_addresses <= MAX_DYNAMIC_ADDRESSES);
 

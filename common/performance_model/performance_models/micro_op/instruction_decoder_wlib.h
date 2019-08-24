@@ -19,7 +19,7 @@ class InstructionDecoder {
 private:
    static void addSrcs(std::set<dl::Decoder::decoder_reg> regs, MicroOp *uop);
    static void addAddrs(std::set<dl::Decoder::decoder_reg> regs, MicroOp *uop);
-   static void addDsts(std::set<dl::Decoder::decoder_reg> regs, MicroOp *uop);
+   static int addDsts(std::set<dl::Decoder::decoder_reg> regs, MicroOp *uop, uint64_t regvalue);
    static unsigned int getNumExecs(const dl::DecodedInst *ins, int numLoads, int numStores);
 public:
    static const std::vector<const MicroOp*>* decode(IntPtr address, const dl::DecodedInst *ins, Instruction *ins_ptr);
