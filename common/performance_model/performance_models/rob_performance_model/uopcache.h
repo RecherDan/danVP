@@ -7,7 +7,7 @@
 
 #define UOPCACHELINES 64000
 #define UOPWAYS 8
-#define UOPCONFLIMIT 0
+#define UOPCONFLIMIT 8
 #define MAXVPINFO 10
 
 struct vpinfo
