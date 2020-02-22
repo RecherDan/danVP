@@ -60,6 +60,9 @@ bool UopCache::periodicPredict() {
 bool UopCache::PredictUop(unsigned long pc, unsigned long BBhead) {
 	if ( !this->uopenabled ) return false;
 	bool predict = false;
+	if ( pc != BBhead ) {
+		return false;
+	}
 	unsigned long set = UopCache::getSet(BBhead);
 	int hitbank = UopCache::getWay(BBhead);
 	int conf = this->uopCache[hitbank][set].conf;
@@ -72,9 +75,9 @@ bool UopCache::PredictUop(unsigned long pc, unsigned long BBhead) {
 		if ( !this->uopCache[hitbank][set].ready )
 			predict = true;
 	}
-	if ( pc == BBhead )
+	if ( pc == BBhead ) {
 		UopCache::storeUopCache(BBhead);
-
+	}
 
 	//return this->periodicPredict();
 	//return RandomPredict();
