@@ -206,10 +206,12 @@ bool UopCache::storeUopCache(unsigned long pc) {
 				this->uopCache[hitbank][set].ready = true;
 		}
 	}
+	else {
+		this->uopcache_stores++;
+	}
 	this->uopCache[hitbank][set].valid = true;
 	this->uopCache[hitbank][set].pc = pc;
 	UopCache::updateLRU(set, hitbank);
-	this->uopcache_stores++;
 	if ( overwritten ) this->uopcache_evictions++;
 	return overwritten;
 }
