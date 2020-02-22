@@ -66,7 +66,7 @@ bool UopCache::PredictUop(unsigned long pc, unsigned long BBhead) {
 	if ( Sim()->getConfig()->getUOPdebug()) {
 		std::cout << "DEBUG: UopCache::PredictUop get prediction of PC: " << std::hex << pc << " BBhead: " << BBhead << std::dec << " set: " << set << " way: " << hitbank  << std::endl;
 	}
-	if ( this->uopCache[hitbank][set].valid && this->uopCache[hitbank][set].pc == BBhead && (conf >= UOPCONFLIMIT -1) ) {
+	if ( this->uopCache[hitbank][set].valid && this->uopCache[hitbank][set].pc == BBhead && ((conf >= UOPCONFLIMIT -1) || (UOPCONFLIMIT == 0) )) {
 		if ( pc == BBhead )
 			this->uopCache[hitbank][set].ready = false;
 		if ( !this->uopCache[hitbank][set].ready )
@@ -194,7 +194,7 @@ bool UopCache::storeUopCache(unsigned long pc) {
 				this->uopCache[hitbank][set].VPinfo[i].valid = false;
 			}
 		}
-		else if ( this->uopCache[hitbank][set].conf < (UOPCONFLIMIT -1) ) {
+		else if ( (this->uopCache[hitbank][set].conf < (UOPCONFLIMIT -1)) || (UOPCONFLIMIT == 0) ) {
 			this->uopCache[hitbank][set].conf = this->uopCache[hitbank][set].conf + 1;
 			if (this->uopCache[hitbank][set].conf == (UOPCONFLIMIT -1))
 				this->uopCache[hitbank][set].ready = true;
