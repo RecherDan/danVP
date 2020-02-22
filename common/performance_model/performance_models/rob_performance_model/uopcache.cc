@@ -129,13 +129,14 @@ bool UopCache::AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long v
 	return false;
 }
 std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long bbhead, unsigned long value) {
+	std::tuple<bool, bool> fret{false, false};
 
-	if ( !this->uopenabled ) return {false , false};
+	if ( !this->uopenabled ) return fret;
 	bool goodPrediction = false;
 	bool badPrediction = false;
 	unsigned long set = UopCache::getSet(bbhead);
 	int hitbank = UopCache::getWay(bbhead);
-	if ( !this->uopCache[hitbank][set].valid ) return {false, false};
+	if ( !this->uopCache[hitbank][set].valid ) return fret;
 	int vpInd = -1;
 	for ( int i = 0 ; i < MAXVPINFO ; i++ ) {
 		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
@@ -143,7 +144,7 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 			vpInd = i;
 		}
 	}
-	if ( vpInd == -1 ) return {false ,false};
+	if ( vpInd == -1 ) return fret;
 
 	if ( value ==this->uopCache[hitbank][set].VPinfo[vpInd].value && this->uopCache[hitbank][set].VPinfo[vpInd].validpredict )
 		goodPrediction = true;
@@ -159,7 +160,9 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 		this->uopCache[hitbank][set].VPinfo[vpInd].validpredict = false;
 		if ( this->uopCache[hitbank][set].VPinfo[vpInd].blacklist > 7 ) this->uopCache[hitbank][set].VPinfo[vpInd].valid = false;
 	}
-	return {goodPrediction , badPrediction};
+	std::tuple<bool, bool> tupleret{goodPrediction, badPrediction};
+
+	return tupleret;
 }
 bool UopCache::checkVPinfo(unsigned long pc, unsigned long bbhead, unsigned long *value) {
 	if ( !this->uopenabled ) return false;
