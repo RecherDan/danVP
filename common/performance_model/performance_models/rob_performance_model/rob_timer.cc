@@ -515,6 +515,7 @@ SubsecondTime RobTimer::doDispatch(SubsecondTime **cpiComponent)
 
          // If uop is already ready, we may need to issue it in the following cycle
          entry->ready = std::max(entry->ready, (now + 1ul).getElapsedTime());
+         std::cout << "aaa" << std::endl;
         /* if ( uop.isUOPpredicted() ) {
         	 std::cout << "RobTimer::doDispatch uop is predicted! calculate: ready " << std::dec << entry->ready  << " now: " << (now + 1ul).getElapsedTime() << std::endl;
         	 SubsecondTime gain = (entry->ready - (now + 1ul).getElapsedTime());

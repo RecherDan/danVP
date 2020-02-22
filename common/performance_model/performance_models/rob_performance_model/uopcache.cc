@@ -6,7 +6,6 @@
 #include "tools.h"
 #include "stats.h"
 
-
 UopCache::UopCache() {
 	  /* initialize random seed: */
   	srand (time(NULL));

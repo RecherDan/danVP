@@ -12,7 +12,8 @@ std::tuple<bool, bool> ValuePrediction::getPrediction(UInt64 seq_no, UInt64 pc, 
 	bool mispredict = false;
 	bool good_prediction = false;
 	bool havePrediction = false;
-	if ( m_vptype == DISABLE) return {false,false};
+	std::tuple<bool, bool> retfalse{false, false};
+	if ( m_vptype == DISABLE) return retfalse;
 	if (  Sim()->getConfig()->getVPdebug() )
 		std::cout << "ValuePrediction::getPrediction PC: " << std::hex << pc << " next pc: " << nextPC << " real_value: " << std::hex << real_value << std::dec << " type: " << TypeName  << " type: " << instype << std::endl;
 	if ( m_vptype == VP_VTAGE)
@@ -53,7 +54,9 @@ std::tuple<bool, bool> ValuePrediction::getPrediction(UInt64 seq_no, UInt64 pc, 
 	if (good_prediction ) this->VP_hits++;
 	if (mispredict ) this->VP_miss++;
 	if ( mispredict || good_prediction ) this->VP_haveprediction++;
-	return {mispredict , good_prediction};
+	std::tuple<bool, bool> retresult{mispredict, good_prediction};
+
+	return retresult;
 }
 void ValuePrediction::speculativeUpdate(UInt64 seq_no,    		// dynamic micro-instruction # (starts at 0 and increments indefinitely)
 							   bool eligible,			// true: instruction is eligible for value prediction. false: not eligible.
