@@ -176,13 +176,15 @@ def CollectData(testlist):
 		total.testscount += 1;
 		total.IPC += test.IPC * test.instructions;
  		for stat, v in sorted(test.VPstats.items()):
-			total.VPstats[stat].setIf(total.VPstats[stat].value  + test.VPstats[stat].value);
+			total.VPstats[stat].setIf(total.VPstats[stat].value  + (test.VPstats[stat].value * test.instructions));
 			print("		%-40s: %10d" % (stat, test.VPstats[stat].value));
 
 def PrintResult():
 	global total
 	global configname
 	global defaultparams
+	for stat, v in sorted(total.VPstats.items()):
+		total.VPstats[stat].setIf(total.VPstats[stat].value/total.instructions);
 	total.addline("Total " + configname, total.cycles/total.instructions, total.IPC/total.instructions, total.instructions/total.testscount, total.VPstats)
 	print("Total Results " + configname)
 	print("		%-40s: %10d" % ("instrctions" , total.instructions/total.testscount))
@@ -193,7 +195,7 @@ def PrintResult():
 	total.testscount = 0
 	total.instructions = 0
 	for stat, v in sorted(total.VPstats.items()):
-		print("		%-40s: %10d" % (stat, total.VPstats[stat].value));
+		print("		%-40s: %10d" % (stat, total.VPstats[stat].value/total.instructions));
 		total.VPstats[stat].setIf(0);
 
 
