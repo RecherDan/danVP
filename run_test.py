@@ -171,10 +171,10 @@ def CollectData(testlist):
 		print("		%-40s: %10d" % ("instrctions" , test.instructions))
 		print("		%-40s: %10d" % ("cycles" , test.cycles))
 		print("		%-40s: %10.2f" % ("IPC", test.IPC))
-		total.cycles += test.cycles;
+		total.cycles += test.cycles * test.instructions;
 		total.instructions += test.instructions;
 		total.testscount += 1;
-		total.IPC += test.IPC;
+		total.IPC += test.IPC * test.instructions;
  		for stat, v in sorted(test.VPstats.items()):
 			total.VPstats[stat].setIf(total.VPstats[stat].value  + test.VPstats[stat].value);
 			print("		%-40s: %10d" % (stat, test.VPstats[stat].value));
@@ -183,11 +183,11 @@ def PrintResult():
 	global total
 	global configname
 	global defaultparams
-	total.addline("Total " + configname, total.cycles, total.IPC/total.testscount, total.instructions, total.VPstats)
+	total.addline("Total " + configname, total.cycles/total.instructions, total.IPC/total.instructions, total.instructions/total.testscount, total.VPstats)
 	print("Total Results " + configname)
-	print("		%-40s: %10d" % ("instrctions" , total.instructions))
-	print("		%-40s: %10d" % ("cycles" , total.cycles))
-	print("		%-40s: %10.2f" % ("IPC", total.IPC/total.testscount))
+	print("		%-40s: %10d" % ("instrctions" , total.instructions/total.testscount))
+	print("		%-40s: %10d" % ("cycles" , total.cycles/total.instructions))
+	print("		%-40s: %10.2f" % ("IPC", total.IPC/total.instructions))
 	total.cycles = 0
 	total.IPC = 0 
 	total.testscount = 0
