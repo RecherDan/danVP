@@ -117,7 +117,7 @@ bool UopCache::AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long v
 	int hitbank = UopCache::getWay(bbhead);
 	if ( !this->uopCache[hitbank][set].valid ) {
 	//	this->uopcache_VP_stores_fails++;
-	//	return false;
+		return false;
 	}
 	this->uopcache_VP_stores++;
 	for ( int i = 0 ; i < MAXVPINFO ; i++) {
@@ -213,6 +213,9 @@ bool UopCache::storeUopCache(unsigned long pc) {
 	}
 	else {
 		this->uopcache_stores++;
+		for ( int i=0 ; i < MAXVPINFO ; i++ ) {
+			this->uopCache[hitbank][set].VPinfo[i].valid = false;
+		}
 	}
 	this->uopCache[hitbank][set].valid = true;
 	this->uopCache[hitbank][set].pc = pc;
