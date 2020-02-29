@@ -115,11 +115,11 @@ bool UopCache::AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long v
 
 	unsigned long set = UopCache::getSet(bbhead);
 	int hitbank = UopCache::getWay(bbhead);
+	if ( Sim()->getConfig()->getUOPdebug())
+				std::cout << "DEBUG: UopCache::AddVPinfo adding VP info for PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << " set: " << set << " way: " << hitbank << " valid: " << (this->uopCache[hitbank][set].valid? "true" : "false")  << std::endl;
 	if ( !this->uopCache[hitbank][set].valid ) {
 		this->uopcache_VP_stores_fails++;
-		if ( Sim()->getConfig()->getUOPdebug())
-				std::cout << "DEBUG: UopCache::AddVPinfo adding VP info for PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << "set: " << set << " way: " << hitbank  << std::endl;
-		return false;
+			return false;
 	}
 	this->uopcache_VP_stores++;
 	for ( int i = 0 ; i < MAXVPINFO ; i++) {
@@ -142,10 +142,12 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 
 	if ( !this->uopenabled ) return fret;
 	this->uopcache_VP_access++;
+	if ( Sim()->getConfig()->getUOPdebug())
 	bool goodPrediction = false;
 	bool badPrediction = false;
 	unsigned long set = UopCache::getSet(bbhead);
 	int hitbank = UopCache::getWay(bbhead);
+	std::cout << "DEBUG: UopCache::getVPprediction PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << " set: " << set << " way: " << hitbank << " valid: " << (this->uopCache[hitbank][set].valid? "true" : "false")  << std::endl;
 	if ( !this->uopCache[hitbank][set].valid ) return fret;
 	int vpInd = -1;
 	for ( int i = 0 ; i < MAXVPINFO ; i++ ) {
@@ -196,7 +198,7 @@ bool UopCache::storeUopCache(unsigned long pc) {
 	unsigned long set = UopCache::getSet(pc);
 	int hitbank = UopCache::getWay(pc);
 	if ( Sim()->getConfig()->getUOPdebug())
-		std::cout << "DEBUG: UopCache::storeUopCache store prediction of PC: " << std::hex << pc << std::dec << "set: " << set << " way: " << hitbank  << std::endl;
+		std::cout << "DEBUG: UopCache::storeUopCache store prediction of PC: " << std::hex << pc << std::dec << " set: " << set << " way: " << hitbank  << std::endl;
 
 	if ( this->uopCache[hitbank][set].valid ) {
 		if ( this->uopCache[hitbank][set].pc != pc ) {
