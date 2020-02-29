@@ -75,9 +75,10 @@ bool UopCache::PredictUop(unsigned long pc, unsigned long BBhead) {
 		if ( !this->uopCache[hitbank][set].ready )
 			predict = true;
 	}
-	if ( pc == BBhead ) {
+	// already return false if PC != BBhead
+	//if ( pc == BBhead ) {
 		UopCache::storeUopCache(BBhead);
-	}
+	//}
 
 	//return this->periodicPredict();
 	//return RandomPredict();
@@ -114,10 +115,10 @@ bool UopCache::AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long v
 
 	unsigned long set = UopCache::getSet(bbhead);
 	int hitbank = UopCache::getWay(bbhead);
-	//if ( !this->uopCache[hitbank][set].valid ) {
+	if ( !this->uopCache[hitbank][set].valid ) {
 	//	this->uopcache_VP_stores_fails++;
 	//	return false;
-	//}
+	}
 	this->uopcache_VP_stores++;
 	for ( int i = 0 ; i < MAXVPINFO ; i++) {
 		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
