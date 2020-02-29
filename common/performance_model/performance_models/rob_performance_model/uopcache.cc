@@ -142,12 +142,13 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 
 	if ( !this->uopenabled ) return fret;
 	this->uopcache_VP_access++;
-	if ( Sim()->getConfig()->getUOPdebug())
+
 	bool goodPrediction = false;
 	bool badPrediction = false;
 	unsigned long set = UopCache::getSet(bbhead);
 	int hitbank = UopCache::getWay(bbhead);
-	std::cout << "DEBUG: UopCache::getVPprediction PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << " set: " << set << " way: " << hitbank << " valid: " << (this->uopCache[hitbank][set].valid? "true" : "false")  << std::endl;
+	if ( Sim()->getConfig()->getUOPdebug())
+		std::cout << "DEBUG: UopCache::getVPprediction PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << " set: " << set << " way: " << hitbank << " valid: " << (this->uopCache[hitbank][set].valid? "true" : "false")  << std::endl;
 	if ( !this->uopCache[hitbank][set].valid ) return fret;
 	int vpInd = -1;
 	for ( int i = 0 ; i < MAXVPINFO ; i++ ) {
