@@ -135,6 +135,7 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 	std::tuple<bool, bool> fret{false, false};
 
 	if ( !this->uopenabled ) return fret;
+	this->uopcache_VP_access++;
 	bool goodPrediction = false;
 	bool badPrediction = false;
 	unsigned long set = UopCache::getSet(bbhead);
@@ -153,7 +154,7 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 		goodPrediction = true;
 	else if ( this->uopCache[hitbank][set].VPinfo[vpInd].validpredict )
 		badPrediction = true;
-	this->uopcache_VP_access++;
+
 	if ( goodPrediction ) this->uopcache_VP_hits++;
 	if ( badPrediction ) this->uopcache_VP_miss++;
 	if ( goodPrediction || badPrediction ) this->uopcache_VP_haveprediction++;
