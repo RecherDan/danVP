@@ -149,7 +149,7 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 		}
 	}
 	if ( vpInd == -1 ) return fret;
-
+	if ( this->uopCache[hitbank][set].VPinfo[vpInd].validpredict ) this->uopcache_VP_haveprediction++;
 	if ( value ==this->uopCache[hitbank][set].VPinfo[vpInd].value && this->uopCache[hitbank][set].VPinfo[vpInd].validpredict )
 		goodPrediction = true;
 	else if ( this->uopCache[hitbank][set].VPinfo[vpInd].validpredict )
@@ -157,7 +157,7 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 
 	if ( goodPrediction ) this->uopcache_VP_hits++;
 	if ( badPrediction ) this->uopcache_VP_miss++;
-	if ( goodPrediction || badPrediction ) this->uopcache_VP_haveprediction++;
+	//if ( goodPrediction || badPrediction ) this->uopcache_VP_haveprediction++;
 	// emit VP on miss:
 	if ( badPrediction ) {
 		this->uopCache[hitbank][set].VPinfo[vpInd].blacklist++;
