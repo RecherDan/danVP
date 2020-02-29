@@ -212,7 +212,7 @@ def GenNewTest(testTraces, name, config):
 SPECDIR = "/home/danr/SPEC-CPU2017v1.0.1/"
 defaultparams=""
 configname=""
-defaultinstructionscount="10000"
+defaultinstructionscount="100000"
 keys = [ 'VP.VP_miss', 'VP.VP_access', 'VP.VP_haveprediction', 'VP.VP_hits', 'VP.VP_Invalidate', 'uopcache.uopcache_access', \
     'uopcache.uopcache_evictions', 'uopcache.uopcache_hits', 'uopcache.uopcache_miss', 'uopcache.uopcache_stores', \
     'uopcache.uopcache_VP_access', 'uopcache.uopcache_VP_haveprediction', 'uopcache.uopcache_VP_hits', 'uopcache.uopcache_VP_miss', \
