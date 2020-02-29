@@ -190,14 +190,13 @@ def PrintResult():
 	print("		%-40s: %10d" % ("instrctions" , total.instructions/total.testscount))
 	print("		%-40s: %10d" % ("cycles" , total.cycles/total.instructions))
 	print("		%-40s: %10.2f" % ("IPC", total.IPC/total.instructions))
+	for stat, v in sorted(total.VPstats.items()):
+		print("		%-40s: %10d" % (stat, total.VPstats[stat].value/total.instructions));
+		total.VPstats[stat].setIf(0);
 	total.cycles = 0
 	total.IPC = 0 
 	total.testscount = 0
 	total.instructions = 0
-	for stat, v in sorted(total.VPstats.items()):
-		print("		%-40s: %10d" % (stat, total.VPstats[stat].value/total.instructions));
-		total.VPstats[stat].setIf(0);
-
 
 def GenNewTest(testTraces, name, config):
 	global total
