@@ -117,6 +117,8 @@ bool UopCache::AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long v
 	int hitbank = UopCache::getWay(bbhead);
 	if ( !this->uopCache[hitbank][set].valid ) {
 		this->uopcache_VP_stores_fails++;
+		if ( Sim()->getConfig()->getUOPdebug())
+				std::cout << "DEBUG: UopCache::AddVPinfo adding VP info for PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << "set: " << set << " way: " << hitbank  << std::endl;
 		return false;
 	}
 	this->uopcache_VP_stores++;
