@@ -43,6 +43,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    //unsigned long long& predicted_value = value;
    const ComponentPeriod *period = core->getDvfsDomain();
    //std::cout << " test " << std::endl;
+   std::cout << "DynamicInstruction::getVPCost_BBhead BBhead: " << std::dec << instruction->getbbhead() << std::endl;
    if ( instruction->getbbhead() < 10 ) {
 	   return static_cast<SubsecondTime>(*period) * 1;
    }
