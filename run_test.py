@@ -121,7 +121,7 @@ class Test:
   def runtest(self):
     print("running " + self.trace)
     #os.system('./run-sniper -c vp ' + self.configparams + ' -- ' + self.exe + ' ' + self.test + ' ' + self.input + ' > ' + self.output + ' 2>' + self.errors)
-    cmd='./run-sniper -c vp ' + self.configparams + ' --traces=' + self.trace + '  >> ' + self.output + ' 2>' + self.errors;
+    cmd='./run-sniper -c vp ' + self.configparams + ' --traces=' + self.trace + '  > ' + self.output + ' 2>' + self.errors;
     print("Exexute: " + cmd);
     os.system(cmd);
     os.system('./tools/dumpstats.py > ' + self.stats )
