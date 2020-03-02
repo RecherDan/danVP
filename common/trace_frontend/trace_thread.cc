@@ -840,6 +840,7 @@ void TraceThread::run()
       // Force BBV end on non-taken branches
       m_bbv_end = inst.is_branch;
       inst.bbhead = m_bbv_base;
+      std::cout << "TraceThread::run() PC: " << std::hex << inst.sinst->addr << " BBhead: " <<  m_bbv_base << std::dec << std::endl;
 
       switch(Sim()->getInstrumentationMode())
       {
