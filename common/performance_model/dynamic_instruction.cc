@@ -43,7 +43,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    //unsigned long long& predicted_value = value;
    const ComponentPeriod *period = core->getDvfsDomain();
    //std::cout << " test " << std::endl;
-   std::cout << "DynamicInstruction::getVPCost PC: " << std::hex << eip << std::dec << " reg: " << vpinfo.regname << ": " << std::hex << vpinfo.value << std::endl;
+   std::cout << "DynamicInstruction::getVPCost PC: " << std::hex << eip << " BBhead: " << instruction->getbbhead() << std::dec << " reg: " << vpinfo.regname << ": " << std::hex << vpinfo.value << std::endl;
    bool is_mispredict = false;
    bool good_prediction = false;
    std::tuple<bool, bool> prediction_results;
