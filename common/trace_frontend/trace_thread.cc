@@ -839,7 +839,7 @@ void TraceThread::run()
       m_bbv_last = inst.sinst->addr + inst.sinst->size;
       // Force BBV end on non-taken branches
       m_bbv_end = inst.is_branch;
-
+      inst.bbhead = m_bbv_base;
 
       switch(Sim()->getInstrumentationMode())
       {
