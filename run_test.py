@@ -79,7 +79,7 @@ class Test:
     self.trace = trace.trace;
     self.test = test
     self.output = test_dir + "/" + name + ".out"
-    #self.output = "/dev/null"
+    self.output = "/dev/null"
     self.input = input
     if input != "":
 	    input = " < " + input
