@@ -110,7 +110,7 @@ bool UopCache::RandomPredict() {
 	//return true;
 	return (rand() %5 == 0 ) ? true : false;	
 }
-bool UopCache::AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long value) {
+bool UopCache::AddVPinfo(uintptr_t pc, unsigned long bbhead, unsigned long value) {
 	if ( !this->uopenabled ) return false;
 
 	unsigned long set = UopCache::getSet(bbhead);
