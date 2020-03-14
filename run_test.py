@@ -275,10 +275,10 @@ for trace in testTraces:
 
 testlist = []
 
-
-GenNewTest(testTraces,"clean", 10, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
-GenNewTest(testTraces,"VP_SIMPLE", 10, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
-GenNewTest(testTraces,"VP_VTAGE", 10, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
-GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", 10, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
-GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", 10, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
+for i in range(0,100):
+	GenNewTest(testTraces,"clean", 10, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
+	GenNewTest(testTraces,"VP_SIMPLE", 10, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
+	GenNewTest(testTraces,"VP_VTAGE", 10, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
+	GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", 10, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
+	GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", 10, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
 
