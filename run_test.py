@@ -276,9 +276,10 @@ for trace in testTraces:
 testlist = []
 
 for i in range(0,100):
-	GenNewTest(testTraces,"clean", i, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
-	GenNewTest(testTraces,"VP_SIMPLE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
-	GenNewTest(testTraces,"VP_VTAGE", i, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
-	GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
-	GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
+	if ( i % 10 ):
+		GenNewTest(testTraces,"clean", i, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
+		GenNewTest(testTraces,"VP_SIMPLE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
+		GenNewTest(testTraces,"VP_VTAGE", i, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
+		GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
+		GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
 
