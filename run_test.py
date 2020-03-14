@@ -99,7 +99,7 @@ class Test:
 	    self.configparams = "-c " + configparams
     else:
 	self.configparams = defaultparams
-	self.configparams = "-c VP/misspenalty=" + self.penalty + " " + self.configparams 
+	self.configparams = "-c VP/misspenalty=" + str(self.penalty) + " " + self.configparams 
 
   def extractStats(self, line, string, location):
 	ret = -1
