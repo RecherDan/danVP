@@ -215,7 +215,7 @@ SPECDIR = "/home/danr/SPEC-CPU2017v1.0.1/"
 defaultparams=""
 configname=""
 defaultinstructionscount="100000000"
-#defaultinstructionscount="100000"
+defaultinstructionscount="1000"
 
 #keys = [ 'VP.VP_miss', 'VP.VP_access', 'VP.VP_haveprediction', 'VP.VP_hits', 'VP.VP_Invalidate', 'uopcache.uopcache_access', \
  #   'uopcache.uopcache_evictions', 'uopcache.uopcache_hits', 'uopcache.uopcache_miss', 'uopcache.uopcache_stores', \
@@ -276,7 +276,7 @@ for trace in testTraces:
 testlist = []
 
 for i in range(0,100):
-	if ( i % 10 ):
+	if ( (i % 10) == 0 ):
 		GenNewTest(testTraces,"clean", i, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
 		GenNewTest(testTraces,"VP_SIMPLE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
 		GenNewTest(testTraces,"VP_VTAGE", i, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
