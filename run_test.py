@@ -78,7 +78,7 @@ class Test:
     self.name = name
     self.trace = trace.trace;
     self.test = test
-	self.config = config
+    self.config = config
     self.penalty = penalty
     self.output = test_dir + "/" + name + ".out"
     self.output = "/dev/null"
