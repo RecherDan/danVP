@@ -209,7 +209,7 @@ def GenNewTest(testTraces, name, penalty, config):
 	testlist = []
 	NewConfig(name, config)
 	for trace in testTraces:
-		testlist.append(Test(trace.name + "_" +  name,"VP_" + name, trace, penalty, "", "", ""))
+		testlist.append(Test(trace.name + "_" +  name,"vp_" + name, trace, penalty, "", "", ""))
 	RunTests(testlist)
 
 SPECDIR = "/home/danr/SPEC-CPU2017v1.0.1/"
