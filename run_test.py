@@ -72,12 +72,13 @@ class Data:
     os.system('echo ' + name + ', ' + str(penalty) + ', ' + str(cycles) + ', ' + str(round(IPC,2)) + ', ' + str(instructions) +  line + ' >> ' + self.csv);    
     #os.system('printf "%s, %d, %.2f, %d %s" ' + name + ' ' + cycles + ' ' + IPC + ' ' + instructions + ' ' + line + ' >> ' + self.csv);
 class Test:
-  def __init__(self, name,trace, penalty, test, input ,configparams):
+  def __init__(self, name, config, trace, penalty, test, input ,configparams):
     global test_dir
     global defaultinstructionscount
     self.name = name
     self.trace = trace.trace;
     self.test = test
+	self.config = config
     self.penalty = penalty
     self.output = test_dir + "/" + name + ".out"
     self.output = "/dev/null"
@@ -123,7 +124,7 @@ class Test:
   def runtest(self):
     print("running " + self.trace)
     #os.system('./run-sniper -c vp ' + self.configparams + ' -- ' + self.exe + ' ' + self.test + ' ' + self.input + ' > ' + self.output + ' 2>' + self.errors)
-    cmd='./run-sniper -c vp ' + self.configparams + ' --traces=' + self.trace + '  > ' + self.output + ' 2>' + self.errors;
+    cmd='./run-sniper -c ' + self.config + ' '  + self.configparams + ' --traces=' + self.trace + '  > ' + self.output + ' 2>' + self.errors;
     print("Exexute: " + cmd);
     os.system(cmd);
     os.system('./tools/dumpstats.py > ' + self.stats )
@@ -208,7 +209,7 @@ def GenNewTest(testTraces, name, penalty, config):
 	testlist = []
 	NewConfig(name, config)
 	for trace in testTraces:
-		testlist.append(Test(trace.name + "_" +  name,trace, penalty, "", "", ""))
+		testlist.append(Test(trace.name + "_" +  name,"VP_" + name, trace, penalty, "", "", ""))
 	RunTests(testlist)
 
 SPECDIR = "/home/danr/SPEC-CPU2017v1.0.1/"
@@ -275,11 +276,17 @@ for trace in testTraces:
 
 testlist = []
 
+#for i in range(0,100):
+#	if ( (i % 10) == 0 ):
+#		GenNewTest(testTraces,"clean", i, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
+#		GenNewTest(testTraces,"VP_SIMPLE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
+#		GenNewTest(testTraces,"VP_VTAGE", i, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
+#		GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
+#		GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
 for i in range(0,100):
 	if ( (i % 10) == 0 ):
-		GenNewTest(testTraces,"clean", i, "-c VP/type=DISABLE -c uopcache/status=DISABLE")
-		GenNewTest(testTraces,"VP_SIMPLE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=DISABLE")
-		GenNewTest(testTraces,"VP_VTAGE", i, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
-		GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
-		GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
-
+		GenNewTest(testTraces,"clean", i, "")
+		GenNewTest(testTraces,"VP_SIMPLE", i, "")
+		GenNewTest(testTraces,"VP_VTAGE", i, "")
+		GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "")
+		GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "")
