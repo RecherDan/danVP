@@ -52,7 +52,7 @@ std::tuple<bool, bool> ValuePrediction::getPrediction(UInt64 seq_no, UInt64 pc, 
 	//std::cout << "mispredict: " << mispredict << " good_prediction: " << good_prediction << std::endl;
 	this->VP_access++;
 	if (good_prediction ) this->VP_hits++;
-	if (mispredict ) this->VP_miss++;
+	if (mispredict ) { this->VP_miss++; this->VP_miss_penalty+=this->m_mispredict_penalty; }
 	if ( mispredict || good_prediction ) this->VP_haveprediction++;
 	std::tuple<bool, bool> retresult{mispredict, good_prediction};
 
@@ -97,11 +97,13 @@ bool ValuePrediction::invalidateEntry(UInt64 pc) {
 ValuePrediction::ValuePrediction(Core* core) {
 	  VP_hits = 0;
 	  VP_miss = 0;
+	  VP_miss_penalty = 0;
 	  VP_access = 0;
 	  VP_haveprediction = 0;
 	  VP_Invalidate = 0;
 	   registerStatsMetric("VP", core->getId(), "VP_hits", &VP_hits);
 	   registerStatsMetric("VP", core->getId(), "VP_miss", &VP_miss);
+	   registerStatsMetric("VP", core->getId(), "VP_miss_penalty", &VP_miss_penalty);
 	   registerStatsMetric("VP", core->getId(), "VP_access", &VP_access);
 	   registerStatsMetric("VP", core->getId(), "VP_haveprediction", &VP_haveprediction);
 	   registerStatsMetric("VP", core->getId(), "VP_Invalidate", &VP_Invalidate);

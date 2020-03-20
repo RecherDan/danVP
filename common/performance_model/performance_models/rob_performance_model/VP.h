@@ -35,6 +35,7 @@ class ValuePrediction {
 		  //stats:
 		  UInt64 VP_hits;
 		  UInt64 VP_miss;
+		  UInt64 VP_miss_penalty;
 		  UInt64 VP_access;
 		  UInt64 VP_haveprediction;
 		  UInt64 VP_Invalidate;
