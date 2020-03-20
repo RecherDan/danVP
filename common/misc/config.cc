@@ -112,6 +112,7 @@ Config::Config(SimulationMode mode)
    m_VPtype = (Sim()->getCfg()->getString("VP/type").compare("VP_SIMPLE") == 0 ) ? VP_SIMPLE : ((Sim()->getCfg()->getString("VP/type").compare("VP_VTAGE") == 0 ) ? VP_VTAGE : DISABLE);
    m_UOPstatus = (Sim()->getCfg()->getString("uopcache/status").compare("ENABLE") == 0 ) ? UOP_ENABLE : UOP_DISABLE;
    m_vp_penalty =  Sim()->getCfg()->getInt("VP/misspenalty");
+   std::cout << "VP miss penalty: " << m_vp_penalty << std::endl;
    m_VP_debug = Sim()->getCfg()->getBool("VP/debug");
    m_UOP_debug = Sim()->getCfg()->getBool("uopcache/debug");
    m_UOP_removevpentry = Sim()->getCfg()->getBool("uopcache/removevpentry");
