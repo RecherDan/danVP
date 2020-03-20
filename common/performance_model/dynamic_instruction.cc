@@ -58,6 +58,9 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    }
    //bool is_mispredict = core->accessBranchPredictor(eip, branch_info.taken, branch_info.target);
    UInt64 cost = is_mispredict ? vp->getMispredictPenalty() : 1;
+   if ( is_mispredict ) {
+		 std::cout << "VP penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
+   }
    bool uopVPhavePrediction = false;
    bool uop_is_mispredict = false;
    bool uop_good_prediction = false;
