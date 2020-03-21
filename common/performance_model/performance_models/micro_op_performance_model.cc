@@ -190,7 +190,8 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 	 int penalty = 0;
 	 SubsecondTime UopMispredictPenalty = dynins->getUopCache(getCore(), &is_uopispredicted);
 	 SubsecondTime VPpenalty = dynins->getVPCost(getCore(), &is_vpmispredicted, &is_GoodPredicted, &penalty);
-
+	 SubsecondTimeCycleConverter conv(this->getCore()->getDvfsDomain());
+	 VPpenalty = conv.cyclesToSubsecondTime(penalty);
 	 this->VP_miss_penalty+=penalty;
 	 std::cout << "increasing penalty: " << std::dec << this->VP_miss_penalty << " by: " << penalty << std::endl;
    for (size_t m = 0 ; m < m_current_uops.size() ; m++ )

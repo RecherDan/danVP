@@ -87,6 +87,8 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
 		 *penalty = vp->getMispredictPenalty();
 		 cost = vp->getMispredictPenalty();
    }
+   //SubsecondTimeCycleConverter CyclesToCost;
+
    return static_cast<SubsecondTime>(*period) * cost;
 }
 
