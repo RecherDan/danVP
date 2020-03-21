@@ -27,10 +27,13 @@ MicroOpPerformanceModel::MicroOpPerformanceModel(Core *core, bool issue_memops)
     , m_dyninsn_count(0)
     , m_dyninsn_cost(0)
     , m_dyninsn_zero_count(0)
+	, VP_miss_penalty(0)
 {
    registerStatsMetric("performance_model", core->getId(), "dyninsn_count", &m_dyninsn_count);
    registerStatsMetric("performance_model", core->getId(), "dyninsn_cost", &m_dyninsn_cost);
    registerStatsMetric("performance_model", core->getId(), "dyninsn_zero_count", &m_dyninsn_zero_count);
+   registerStatsMetric("VP", core->getId(), "VP_miss_penalty", &VP_miss_penalty);
+
 #if DEBUG_DYN_INSN_LOG
    String filename;
    filename = "sim.dyninsn_log." + itostr(core->getId());
@@ -186,6 +189,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 	 bool is_uopispredicted = false;
 	 SubsecondTime UopMispredictPenalty = dynins->getUopCache(getCore(), &is_uopispredicted);
 	 SubsecondTime VPpenalty = dynins->getVPCost(getCore(), &is_vpmispredicted, &is_GoodPredicted);
+	 VP_miss_penalty+=int(VPpenalty);
    for (size_t m = 0 ; m < m_current_uops.size() ; m++ )
    {
 		 m_current_uops[m]->setVPMispredicted(is_vpmispredicted);

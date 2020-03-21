@@ -45,7 +45,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    //std::cout << " test " << std::endl;
    if ( instruction->getbbhead() < 10 ) {
 	   std::cout << "DynamicInstruction::getVPCost_BBhead BBhead: " << std::dec << instruction->getbbhead() << std::endl;
-	   return static_cast<SubsecondTime>(*period) * 1;
+	   return static_cast<SubsecondTime>(*period) * 0;
    }
    std::cout << "DynamicInstruction::getVPCost PC: " << std::hex << eip << " BBhead: " << instruction->getbbhead() << std::dec << " reg: " << vpinfo.regname << ": " << std::hex << vpinfo.value << std::endl;
    bool is_mispredict = false;
@@ -57,7 +57,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    	   //good_prediction = std::get<0>(prediction_results);
    }
    //bool is_mispredict = core->accessBranchPredictor(eip, branch_info.taken, branch_info.target);
-   UInt64 cost = is_mispredict ? vp->getMispredictPenalty() : 1;
+   UInt64 cost = is_mispredict ? vp->getMispredictPenalty() : 0;
    if ( is_mispredict ) {
 		 std::cout << "VP penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
    }

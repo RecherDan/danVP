@@ -48,6 +48,7 @@ private:
    UInt64 m_dyninsn_count;
    UInt64 m_dyninsn_cost;
    UInt64 m_dyninsn_zero_count;
+   UInt64 VP_miss_penalty;
 
 #if DEBUG_DYN_INSN_LOG
    FILE *m_dyninsn_log;

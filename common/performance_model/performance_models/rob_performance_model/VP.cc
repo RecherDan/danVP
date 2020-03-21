@@ -103,7 +103,7 @@ ValuePrediction::ValuePrediction(Core* core) {
 	  VP_Invalidate = 0;
 	   registerStatsMetric("VP", core->getId(), "VP_hits", &VP_hits);
 	   registerStatsMetric("VP", core->getId(), "VP_miss", &VP_miss);
-	   registerStatsMetric("VP", core->getId(), "VP_miss_penalty", &VP_miss_penalty);
+	   //registerStatsMetric("VP", core->getId(), "VP_miss_penalty", &VP_miss_penalty);
 	   registerStatsMetric("VP", core->getId(), "VP_access", &VP_access);
 	   registerStatsMetric("VP", core->getId(), "VP_haveprediction", &VP_haveprediction);
 	   registerStatsMetric("VP", core->getId(), "VP_Invalidate", &VP_Invalidate);
