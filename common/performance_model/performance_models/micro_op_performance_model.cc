@@ -362,6 +362,8 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 	bool is_goodpredicted = false;
 	int penalty =0;
 	m_current_uops[exec_base_index]->setVPMispredictitonPenalty(dynins->getVPCost(getCore(), &is_vpmispredicted, &is_goodpredicted, &penalty));
+	 this->VP_miss_penalty+=penalty;
+	 std::cout << "2increasing penalty: " << std::dec << this->VP_miss_penalty << " by: " << penalty << std::endl;
 	m_current_uops[exec_base_index]->setVPMispredicted(is_vpmispredicted);
    }
    if (dynins->instruction->getType() == INST_BRANCH)
