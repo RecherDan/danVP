@@ -286,8 +286,8 @@ testlist = []
 #		GenNewTest(testTraces,"VP_VTAGE", i, "-c VP/type=VP_VTAGE -c uopcache/status=DISABLE")
 #		GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
 #		GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
-for i in range(0,1000):
-	if ( (i % 100) == 0 ):
+for i in range(0,100000):
+	if ( (i % 1000) == 0 ):
 		GenNewTest(testTraces,"clean", i, "")
 		GenNewTest(testTraces,"VP_SIMPLE", i, "")
 		GenNewTest(testTraces,"VP_VTAGE", i, "")
