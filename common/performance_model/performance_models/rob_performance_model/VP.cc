@@ -52,7 +52,7 @@ std::tuple<bool, bool> ValuePrediction::getPrediction(UInt64 seq_no, UInt64 pc, 
 	//std::cout << "mispredict: " << mispredict << " good_prediction: " << good_prediction << std::endl;
 	this->VP_access++;
 	if (good_prediction ) this->VP_hits++;
-	if (mispredict ) { this->VP_miss++; this->VP_miss_penalty+=this->m_mispredict_penalty; }
+	if (mispredict ) { this->VP_miss++; this->VP_miss_penalty+=this->m_mispredict_penalty; std::cout << "increasing penalty: " << this->VP_miss_penalty << " by: " >> this->m_mispredict_penalty << std::endl; }
 	if ( mispredict || good_prediction ) this->VP_haveprediction++;
 	std::tuple<bool, bool> retresult{mispredict, good_prediction};
 
