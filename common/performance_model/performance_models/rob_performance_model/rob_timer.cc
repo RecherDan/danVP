@@ -708,8 +708,8 @@ void RobTimer::issueInstruction(uint64_t idx, SubsecondTime &next_event)
    }
 
    if (  uop.isVPMispredicted() ) {
-	   std::cout<<"misprediction penalty!"<<std::endl;
 	    frontend_stalled_until = now + (uop.getVPMispredictitonPenalty()) ;
+	    std::cout<<"misprediction penalty! " << now << " to: " << frontend_stalled_until <<std::endl;
    }
    // After issuing a mispredicted branch: allow the ROB to refill after flushing the pipeline
    if (uop.getMicroOp()->isBranch() && uop.isBranchMispredicted())
