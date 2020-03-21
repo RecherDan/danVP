@@ -82,7 +82,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    *is_GoodPredicted = uopVPhavePrediction || good_prediction;
    *p_is_mispredict =  !(uopVPhavePrediction || good_prediction) && (is_mispredict || uop_is_mispredict);
    if ( (is_mispredict || uop_is_mispredict) ) {
-		 std::cout << "VP penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
+		 std::cout << "VP penalty: VP: " << (is_mispredict ? "MISS" : "False") <<  " UOP VP: " << (uop_is_mispredict ? "MISS" : "False") << " Penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
 		 *penalty = vp->getMispredictPenalty();
 		 cost = vp->getMispredictPenalty();
    }
