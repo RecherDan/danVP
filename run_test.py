@@ -104,7 +104,7 @@ class Test:
 
   def extractStats(self, line, string, location):
 	ret = -1
-	if string in line:
+	if string == line.split('\n')[0].split(' ')[0]:
            ret = int(line.split('\n')[0].split(' ')[location])
 	return ret
   
