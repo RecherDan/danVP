@@ -105,9 +105,10 @@ class Test:
   def extractStats(self, line, string, location):
 	ret = -1
 	check = line.split('\n')[0].split(' ')[0]
+	stat = int(line.split('\n')[0].split(' ')[location])
 	if string == check:
-           print ("comparing %s with %s: %s" % (check, string, check == string))
-           ret = int(line.split('\n')[0].split(' ')[location])
+           print ("comparing %s with %s: %s , stat: %d" % (check, string, check == string, stat))
+           ret = stat
 	return ret
   
   def recordTrace(self):
