@@ -104,8 +104,9 @@ class Test:
 
   def extractStats(self, line, string, location):
 	ret = -1
-	print ("comparing %s with %s: %s" % (line.split('\n')[0].split(' ')[0], string, line.split('\n')[0].split(' ')[0] == string))
-	if string == line.split('\n')[0].split(' ')[0]:
+	check = line.split('\n')[0].split(' ')[0]
+	if string == check:
+	       print ("comparing %s with %s: %s" % (check, string, check == string))
            ret = int(line.split('\n')[0].split(' ')[location])
 	return ret
   
