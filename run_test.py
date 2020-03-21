@@ -107,7 +107,7 @@ class Test:
 	check = line.split('\n')[0].split(' ')[0]
 	stat = int(float(line.split('\n')[0].split(' ')[location]))
 	if string == check:
-           print ("comparing %s with %s: %s , stat: %d" % (check, string, check == string, stat))
+           #print ("comparing %s with %s: %s , stat: %d" % (check, string, check == string, stat))
            ret = stat
 	return ret
   
