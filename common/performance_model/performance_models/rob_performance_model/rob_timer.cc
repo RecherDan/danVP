@@ -710,7 +710,7 @@ void RobTimer::issueInstruction(uint64_t idx, SubsecondTime &next_event)
    }
 
    if (  uop.isVPMispredicted() ) {
-	    frontend_stalled_until = now + (uop.getVPMispredictitonPenalty()) ;
+	    frontend_stalled_until = now + (uop.getVPMispredictitonPenalty()*10) ;
 	    m_real_vp_miss++;
 	    std::cout<<"misprediction penalty! " << now << " to: " << frontend_stalled_until <<std::endl;
    }
