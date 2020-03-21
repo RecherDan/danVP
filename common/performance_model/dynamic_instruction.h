@@ -106,7 +106,7 @@ class DynamicInstruction
       }
 
       SubsecondTime getBranchCost(Core *core, bool *p_is_mispredict = NULL);
-      SubsecondTime getVPCost(Core *core, bool *p_is_mispredict, bool *is_GoodPredicted);
+      SubsecondTime getVPCost(Core *core, bool *p_is_mispredict, bool *is_GoodPredicted, int *penalty);
       SubsecondTime getUopCache(Core *core, bool *is_uopispredicted = NULL);
       void accessMemory(Core *core);
 };

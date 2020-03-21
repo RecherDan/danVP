@@ -187,9 +187,11 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 	 bool is_vpmispredicted = false;
 	 bool is_GoodPredicted = false;
 	 bool is_uopispredicted = false;
+	 int penalty = 0;
 	 SubsecondTime UopMispredictPenalty = dynins->getUopCache(getCore(), &is_uopispredicted);
-	 SubsecondTime VPpenalty = dynins->getVPCost(getCore(), &is_vpmispredicted, &is_GoodPredicted);
-	 VP_miss_penalty+=(VPpenalty * SubsecondTime(1));
+	 SubsecondTime VPpenalty = dynins->getVPCost(getCore(), &is_vpmispredicted, &is_GoodPredicted, &penalty);
+
+	 VP_miss_penalty+=penalty;
    for (size_t m = 0 ; m < m_current_uops.size() ; m++ )
    {
 		 m_current_uops[m]->setVPMispredicted(is_vpmispredicted);

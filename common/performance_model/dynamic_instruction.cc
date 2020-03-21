@@ -34,7 +34,7 @@ SubsecondTime DynamicInstruction::getUopCache(Core *core, bool *is_uopispredicte
 	*is_uopispredicted = uopPrediction;
 	return static_cast<SubsecondTime>(*period);
 }
-SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, bool *is_GoodPredicted)
+SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, bool *is_GoodPredicted, int *penalty)
 {
    //PerformanceModel *perf = core->getPerformanceModel();
    ValuePrediction *vp = core->getValuePrediction();
@@ -42,6 +42,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    //unsigned long long value = vpinfo.value;
    //unsigned long long& predicted_value = value;
    const ComponentPeriod *period = core->getDvfsDomain();
+   *penalty=0;
    //std::cout << " test " << std::endl;
    if ( instruction->getbbhead() < 10 ) {
 	   std::cout << "DynamicInstruction::getVPCost_BBhead BBhead: " << std::dec << instruction->getbbhead() << std::endl;
@@ -60,6 +61,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    UInt64 cost = is_mispredict ? vp->getMispredictPenalty() : 0;
    if ( is_mispredict ) {
 		 std::cout << "VP penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
+		 *penalty = vp->getMispredictPenalty();
    }
    bool uopVPhavePrediction = false;
    bool uop_is_mispredict = false;
