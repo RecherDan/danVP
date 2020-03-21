@@ -193,7 +193,7 @@ void MicroOpPerformanceModel::handleInstruction(DynamicInstruction *dynins)
 	 SubsecondTimeCycleConverter conv(this->getCore()->getDvfsDomain());
 	 VPpenalty = conv.cyclesToSubsecondTime(penalty);
 	 this->VP_miss_penalty+=penalty;
-	 std::cout << "increasing penalty: " << std::dec << this->VP_miss_penalty << " by: " << penalty << std::endl;
+	 std::cout << "increasing penalty: " << std::dec << this->VP_miss_penalty << " by: " << penalty << " translated to time: " << VPpenalty << std::endl;
    for (size_t m = 0 ; m < m_current_uops.size() ; m++ )
    {
 		 m_current_uops[m]->setVPMispredicted(is_vpmispredicted);
