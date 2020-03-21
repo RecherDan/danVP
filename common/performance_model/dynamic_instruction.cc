@@ -58,11 +58,8 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    	   //good_prediction = std::get<0>(prediction_results);
    }
    //bool is_mispredict = core->accessBranchPredictor(eip, branch_info.taken, branch_info.target);
-   UInt64 cost = is_mispredict ? vp->getMispredictPenalty() : 0;
-   if ( is_mispredict ) {
-		 std::cout << "VP penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
-		 *penalty = vp->getMispredictPenalty();
-   }
+   UInt64 cost = 0;
+
    bool uopVPhavePrediction = false;
    bool uop_is_mispredict = false;
    bool uop_good_prediction = false;
@@ -84,6 +81,11 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    std::cout << "is_GoodPredicted address: " << std::hex << is_GoodPredicted << " value: " << *is_GoodPredicted << std::endl;
    *is_GoodPredicted = uopVPhavePrediction || good_prediction;
    *p_is_mispredict =  !(uopVPhavePrediction || good_prediction) && (is_mispredict || uop_is_mispredict);
+   if ( !(uopVPhavePrediction || good_prediction) && (is_mispredict || uop_is_mispredict) ) {
+		 std::cout << "VP penalty: " << std::dec << vp->getMispredictPenalty() << std::endl;
+		 *penalty = vp->getMispredictPenalty();
+		 UInt64 cost = vp->getMispredictPenalty();
+   }
    return static_cast<SubsecondTime>(*period) * cost;
 }
 
