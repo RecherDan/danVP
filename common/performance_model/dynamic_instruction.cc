@@ -62,7 +62,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
 	//   *is_GoodPredicted = good_prediction;
 
    if ( uopcache->isUopCacheValid() ) {
-	   std::tie(uop_is_mispredict,uop_good_prediction) = ( uopcache->getVPprediction(eip , instruction->getbbhead(), vpinfo.value) );
+	   std::tie(uop_good_prediction, uop_is_mispredict) = ( uopcache->getVPprediction(eip , instruction->getbbhead(), vpinfo.value) );
 	   uopVPhavePrediction = (uop_is_mispredict || uop_good_prediction);
 	   std::cout << "UOP CACHE haveprediction: " << (uopVPhavePrediction ? "TRUE" : "FALSE") <<  " good: " << (uop_good_prediction ? "TRUE" : "FALSE") << " bad: " << (uop_is_mispredict ? "TRUE" : "FALSE") << std::endl;
    }
