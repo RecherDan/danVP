@@ -226,7 +226,7 @@ defaultinstructionscount="100000"
   #  'uopcache.uopcache_VP_access', 'uopcache.uopcache_VP_haveprediction', 'uopcache.uopcache_VP_hits', 'uopcache.uopcache_VP_miss', \
    # 'uopcache.uopcache_VP_stores', 'uopcache.uopcache_VP_stores_fails', 'uopcache.uopcache_VP_stores_success', 'dtlb.access', 'dtlb.miss', 'itlb.access', 'itlb.miss', 'stlb.access', 'stlb.miss',  ]
 
-keys = [ 'VP.VP_miss', 'VP.VP_miss_penalty', 'VP.VP_access', 'VP.VP_haveprediction', 'VP.VP_hits', 'VP.VP_Invalidate',  \
+keys = [ 'VP.real_vp_miss', 'VP.VP_miss', 'VP.VP_miss_penalty', 'VP.VP_access', 'VP.VP_haveprediction', 'VP.VP_hits', 'VP.VP_Invalidate',  \
 		'uopcache.uopcache_VP_access', 'uopcache.uopcache_VP_haveprediction', 'uopcache.uopcache_VP_hits', 'uopcache.uopcache_VP_miss', 'uopcache.uopcache_VP_stores', 'uopcache.uopcache_VP_stores_fails', \
     'uopcache.uopcache_VP_stores_success', 'uopcache.uopcache_access', 'uopcache.uopcache_evictions', 'uopcache.uopcache_hits', 'uopcache.uopcache_miss', 'uopcache.uopcache_stores', \
     'dtlb.access', 'dtlb.miss', 'itlb.access', 'itlb.miss', 'stlb.access', 'stlb.miss',  ]
