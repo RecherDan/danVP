@@ -87,6 +87,7 @@ private:
    UInt64 m_uops_total;
    UInt64 m_uops_x87;
    UInt64 m_uops_pause;
+   UInt64 m_real_vp_miss;
 
    uint64_t m_numICacheOverlapped;
    uint64_t m_numBPredOverlapped;

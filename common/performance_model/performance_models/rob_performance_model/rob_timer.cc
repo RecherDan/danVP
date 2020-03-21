@@ -73,9 +73,11 @@ RobTimer::RobTimer(
    m_uops_total = 0;
    m_uops_x87 = 0;
    m_uops_pause = 0;
+   m_real_vp_miss = 0;
    registerStatsMetric("rob_timer", core->getId(), "uops_total", &m_uops_total);
    registerStatsMetric("rob_timer", core->getId(), "uops_x87", &m_uops_x87);
    registerStatsMetric("rob_timer", core->getId(), "uops_pause", &m_uops_pause);
+   registerStatsMetric("VP", core->getId(), "real_vp_miss", &m_real_vp_miss);
 
    m_numSerializationInsns = 0;
    m_totalSerializationLatency = 0;
@@ -709,6 +711,7 @@ void RobTimer::issueInstruction(uint64_t idx, SubsecondTime &next_event)
 
    if (  uop.isVPMispredicted() ) {
 	    frontend_stalled_until = now + (uop.getVPMispredictitonPenalty()) ;
+	    m_real_vp_miss++;
 	    std::cout<<"misprediction penalty! " << now << " to: " << frontend_stalled_until <<std::endl;
    }
    // After issuing a mispredicted branch: allow the ROB to refill after flushing the pipeline
