@@ -49,14 +49,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
 	   return static_cast<SubsecondTime>(*period) * 0;
    }
    std::cout << "DynamicInstruction::getVPCost PC: " << std::hex << eip << " BBhead: " << instruction->getbbhead() << std::dec << " reg: " << vpinfo.regname << ": " << std::hex << vpinfo.value << std::endl;
-   bool is_mispredict = false;
-   bool good_prediction = false;
-   std::tuple<bool, bool> prediction_results;
-   if (vp->isOn() && vpinfo.isEligible) {
-	   std::tie(is_mispredict,good_prediction) = ( vp->getPrediction(0,eip,0,vpinfo.value,vpinfo.NextPC, vpinfo.type, vpinfo.TypeName) );
-	   //is_mispredict = std::get<0>(prediction_results);
-   	   //good_prediction = std::get<0>(prediction_results);
-   }
+
    //bool is_mispredict = core->accessBranchPredictor(eip, branch_info.taken, branch_info.target);
    UInt64 cost = 0;
 
@@ -72,7 +65,14 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
 	   std::tie(uop_is_mispredict,uop_good_prediction) = ( uopcache->getVPprediction(eip , instruction->getbbhead(), vpinfo.value) );
 	   uopVPhavePrediction = (uop_is_mispredict || uop_good_prediction);
    }
-
+   bool is_mispredict = false;
+   bool good_prediction = false;
+   std::tuple<bool, bool> prediction_results;
+   if (vp->isOn() && vpinfo.isEligible && !uopVPhavePrediction) {
+	   std::tie(is_mispredict,good_prediction) = ( vp->getPrediction(0,eip,0,vpinfo.value,vpinfo.NextPC, vpinfo.type, vpinfo.TypeName) );
+	   //is_mispredict = std::get<0>(prediction_results);
+   	   //good_prediction = std::get<0>(prediction_results);
+   }
    if ( uopcache->isUopCacheValid() && uopcache->getVPremovevpentry() && good_prediction ) {
 		   uopcache->AddVPinfo(eip, instruction->getbbhead(), vpinfo.value);
 	   	   vp->invalidateEntry(eip);
