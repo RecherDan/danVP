@@ -248,16 +248,16 @@ tests['exchange2']="/home/danr/SPEC_RUNS/648.exchange2_s/exchange2_s 6"
 tests['xz']="/home/danr/SPEC_RUNS/657.xz_s/xz_s /home/danr/SPEC_RUNS/657.xz_s/cpu2006docs.tar.xz 6643 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1036078272 1111795472 4"
 
 testTraces= []
-#testTraces.append(TestExec('perlbench',"/home/danr/SPEC_RUNS/600.perlbench_s/","perlbench_r -I/home/danr/SPEC_RUNS/600.perlbench_s/lib checkspam.pl 2500 5 25 11 150 1 1 1 1"));
-#testTraces.append(TestExec('gcc',"/home/danr/SPEC_RUNS/602.gcc_s/", "sgcc /home/danr/SPEC_RUNS/602.gcc_s/gcc-pp.c -O5 -fipa-pta -o /home/danr/SPEC_RUNS/602.gcc_s/gcc-pp.opts-O5_-fipa-pta.s"));
-#testTraces.append(TestExec('mcf',"/home/danr/SPEC_RUNS/605.mcf_s/", "mcf_s /home/danr/SPEC_RUNS/605.mcf_s/inp.in"));
-#testTraces.append(TestExec('omnetpp',"/home/danr/SPEC_RUNS/620.omnetpp_s/", "omnetpp_s -c General -r 0"));
-#testTraces.append(TestExec('xalancbmk',"/home/danr/SPEC_RUNS/623.xalancbmk_s/", "xalancbmk_s -v /home/danr/SPEC_RUNS/623.xalancbmk_s/t5.xml /home/danr/SPEC_RUNS/623.xalancbmk_s/xalanc.xsl"));
-#testTraces.append(TestExec('x264',"/home/danr/SPEC_RUNS/625.x264_s/", "x264_s --pass 1 --stats /home/danr/SPEC_RUNS/625.x264_s/x264_stats.log --bitrate 1000 --frames 1000 -o /home/danr/SPEC_RUNS/625.x264_s/BuckBunny_New.264 /home/danr/SPEC_RUNS/625.x264_s/BuckBunny.yuv 1280x720"));
+testTraces.append(TestExec('perlbench',"/home/danr/SPEC_RUNS/600.perlbench_s/","perlbench_r -I/home/danr/SPEC_RUNS/600.perlbench_s/lib checkspam.pl 2500 5 25 11 150 1 1 1 1"));
+testTraces.append(TestExec('gcc',"/home/danr/SPEC_RUNS/602.gcc_s/", "sgcc /home/danr/SPEC_RUNS/602.gcc_s/gcc-pp.c -O5 -fipa-pta -o /home/danr/SPEC_RUNS/602.gcc_s/gcc-pp.opts-O5_-fipa-pta.s"));
+testTraces.append(TestExec('mcf',"/home/danr/SPEC_RUNS/605.mcf_s/", "mcf_s /home/danr/SPEC_RUNS/605.mcf_s/inp.in"));
+testTraces.append(TestExec('omnetpp',"/home/danr/SPEC_RUNS/620.omnetpp_s/", "omnetpp_s -c General -r 0"));
+testTraces.append(TestExec('xalancbmk',"/home/danr/SPEC_RUNS/623.xalancbmk_s/", "xalancbmk_s -v /home/danr/SPEC_RUNS/623.xalancbmk_s/t5.xml /home/danr/SPEC_RUNS/623.xalancbmk_s/xalanc.xsl"));
+testTraces.append(TestExec('x264',"/home/danr/SPEC_RUNS/625.x264_s/", "x264_s --pass 1 --stats /home/danr/SPEC_RUNS/625.x264_s/x264_stats.log --bitrate 1000 --frames 1000 -o /home/danr/SPEC_RUNS/625.x264_s/BuckBunny_New.264 /home/danr/SPEC_RUNS/625.x264_s/BuckBunny.yuv 1280x720"));
 testTraces.append(TestExec('deepsjeng',"/home/danr/SPEC_RUNS/631.deepsjeng_s/", "deepsjeng_s /home/danr/SPEC_RUNS/631.deepsjeng_s/ref.txt"));
 testTraces.append(TestExec('leela',"/home/danr/SPEC_RUNS/641.leela_s/", "leela_s /home/danr/SPEC_RUNS/641.leela_s/ref.sgf"));
-#testTraces.append(TestExec('exchange2',"/home/danr/SPEC_RUNS/648.exchange2_s/", "exchange2_s 6"));
-#testTraces.append(TestExec('xz',"/home/danr/SPEC_RUNS/657.xz_s/", "xz_s /home/danr/SPEC_RUNS/657.xz_s/cpu2006docs.tar.xz 6643 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1036078272 1111795472 4"));
+testTraces.append(TestExec('exchange2',"/home/danr/SPEC_RUNS/648.exchange2_s/", "exchange2_s 6"));
+testTraces.append(TestExec('xz',"/home/danr/SPEC_RUNS/657.xz_s/", "xz_s /home/danr/SPEC_RUNS/657.xz_s/cpu2006docs.tar.xz 6643 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1036078272 1111795472 4"));
 for trace in testTraces:
   trace.record_trace();
 
@@ -287,7 +287,7 @@ testlist = []
 #		GenNewTest(testTraces, "VP_SIMPLE_UOPCACHE", i, "-c VP/type=VP_SIMPLE -c uopcache/status=ENABLE")
 #		GenNewTest(testTraces, "VP_VTAGE_UOPCACHE", i, "-c VP/type=VP_VTAGE -c uopcache/status=ENABLE")
 for i in range(0,1000):
-	if ( (((i % 10) == 0 ) and i < 101 ) or (((i % 100) == 0 ) and i > 101 ) ):
+	if ( (((i % 5) == 0 ) and i < 121 ) or (((i % 100) == 0 ) and i > 101 and false ) ):
 		GenNewTest(testTraces,"clean", i, "")
 		GenNewTest(testTraces,"VP_SIMPLE", i, "")
 		GenNewTest(testTraces,"VP_VTAGE", i, "")
