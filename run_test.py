@@ -262,9 +262,10 @@ for trace in testTraces:
   trace.record_trace();
 
 #testTraces.append(TestExec('exchange2', '/home/danr/SPEC_RUNS/648.exchange2_s', '/home/danr/SPEC_RUNS/648.exchange2_s/exchange2_s 6'));
-
+##
 
 #.record_trace();
+####
 
 #tests['perlbench']="runcpu --config=dan 600.perlbench_s"
 #tests['gcc']="runcpu --config=dan 602.gcc_s"
