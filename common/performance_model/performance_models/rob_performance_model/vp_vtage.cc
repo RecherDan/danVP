@@ -78,7 +78,7 @@ int tagwidth=11;
 int nbbank=49;
 
 int nhist=7;
-int hl[15] = { 0, 0, 1, 3, 6, 12, 18, 30 };
+int hl[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0, 0 };
 int seq_commit;
 int logstr=4;
 int nbwaystr=3;
@@ -107,7 +107,7 @@ void setglobals(int a) {
 		tagwidth=11;
 		nbbank=47;
 		nhist=8;
-		hl[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127 };
+		hl[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127, 0, 0, 0, 0, 0, 0, 0 };
 		logstr=4;
 		nbwaystr=3;
 		tagwidthstr=14;
@@ -181,7 +181,7 @@ struct longdata
   UInt64 data;
   unsigned short u;
 };
-static longdata LDATA[3 * 1048576‬];
+static longdata LDATA[3145728];
 //  managed as a a skewed associative array
 //each entry is 64-LOGLDATA bits for the data (since the other bits can be deduced from the index) + 2 bits for u
 
@@ -195,7 +195,7 @@ struct vtentry
   //LOGLDATA +4 +WIDTHCONFID +TAGWIDTH bits
 };
 
-static vtentry Vtage[66060288‬];
+static vtentry Vtage[66060288];
 
 #define  MAXTICK 1024
 static int TICK;		//10 bits // for managing replacement on the VTAGE entries
