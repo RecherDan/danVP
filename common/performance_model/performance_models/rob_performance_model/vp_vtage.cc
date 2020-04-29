@@ -43,27 +43,7 @@ int HL[NHIST + 1] = { 0, 0, 3, 7, 15, 31, 63, 90, 127 };
 #endif
 //END 32 KB//
 
-// 8KB //
-#define K8
-#ifdef K8
-// 8KB
-// 4.026 //3.729 Stride only // 3.437 for TAGE  only
-// 65378 bits
-#define UWIDTH 2
-#define LOGLDATA 7
-#define LOGBANK 5
-#define TAGWIDTH 11
-#define NBBANK 47
 
-#define NHIST 7
-int HL[NHIST + 1] = { 0, 0, 1, 3, 6, 12, 18, 30 };
-
-#define LOGSTR 4
-#define NBWAYSTR 3
-#define TAGWIDTHSTR 14
-#define LOGSTRIDE 20
-#endif
-//END 8KB //
 
 
 //UNLIMITED//
