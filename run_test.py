@@ -248,7 +248,7 @@ tests['exchange2']="/home/danr/SPEC_RUNS/648.exchange2_s/exchange2_s 6"
 tests['xz']="/home/danr/SPEC_RUNS/657.xz_s/xz_s /home/danr/SPEC_RUNS/657.xz_s/cpu2006docs.tar.xz 6643 055ce243071129412e9dd0b3b69a21654033a9b723d874b2015c774fac1553d9713be561ca86f74e4f16f22e664fc17a79f30caa5ad2c04fbc447549c2810fae 1036078272 1111795472 4"
 
 testTraces= []
-testTraces.append(TestExec('perlbench',"/home/danr/SPEC_RUNS/600.perlbench_s/","perlbench_r -I/home/danr/SPEC_RUNS/600.perlbench_s/lib checkspam.pl 2500 5 25 11 150 1 1 1 1"));
+testTraces.append(TestExec('perlbench',"/home/danr/SPEC_RUNS/600.perlbench_s/","perlbench_s -I/home/danr/SPEC_RUNS/600.perlbench_s/lib checkspam.pl 2500 5 25 11 150 1 1 1 1"));
 testTraces.append(TestExec('gcc',"/home/danr/SPEC_RUNS/602.gcc_s/", "sgcc /home/danr/SPEC_RUNS/602.gcc_s/gcc-pp.c -O5 -fipa-pta -o /home/danr/SPEC_RUNS/602.gcc_s/gcc-pp.opts-O5_-fipa-pta.s"));
 testTraces.append(TestExec('mcf',"/home/danr/SPEC_RUNS/605.mcf_s/", "mcf_s /home/danr/SPEC_RUNS/605.mcf_s/inp.in"));
 testTraces.append(TestExec('omnetpp',"/home/danr/SPEC_RUNS/620.omnetpp_s/", "omnetpp_s -c General -r 0"));
