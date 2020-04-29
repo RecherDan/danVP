@@ -78,7 +78,7 @@ int tagwidth=11;
 int nbbank=49;
 
 int nhist=7;
-int hl[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
+int HL[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
 int seq_commit;
 int logstr=4;
 int nbwaystr=3;
@@ -113,7 +113,7 @@ void setglobals(int a) {
 		tagwidthstr=14;
 		logstride=20;
 		for ( int i = 0; i < 15; ++i ) {
-			hl[i] = hl2[i];
+			HL[i] = hl2[i];
 		}
 
 	}
@@ -131,7 +131,7 @@ void setglobals(int a) {
 		tagwidthstr=15;
 		logstride=30;
 		for ( int i = 0; i < 15; ++i ) {
-			hl[i] = hl2[i];
+			HL[i] = hl2[i];
 		}
 	}
 	maxconfid=((1<< WIDTHCONFID)-1);
@@ -209,7 +209,7 @@ static int LastMispVT = 0;	//8 bits //for tracking the last misprediction on VTA
 unsigned int
 gi (int i, UInt64 pc)
 {
-  int hl = (hl[i] < 64) ? (hl[i] % 64) : 64;
+  int hl = (HL[i] < 64) ? (HL[i] % 64) : 64;
   UInt64 inter = (hl < 64) ? (((1 << hl) - 1) & gpath[0]) : gpath[0];
   UInt64 res = 0;
   inter ^= (pc >> (i)) ^ (pc);
@@ -220,7 +220,7 @@ gi (int i, UInt64 pc)
       inter ^= ((inter & 15) << 16);
       inter >>= (logbank - ((nhist - i + logbank - 1) % (logbank - 1)));
     }
-  hl = (hl < (hl[nhist] + 1) / 2) ? hl : ((hl[nhist] + 1) / 2);
+  hl = (hl < (HL[nhist] + 1) / 2) ? hl : ((HL[nhist] + 1) / 2);
 
   inter ^= (hl < 64) ? (((1 << hl) - 1) & gtargeth) : gtargeth;
   for (int t = 0; t <= hl / logbank; t++)
@@ -230,9 +230,9 @@ gi (int i, UInt64 pc)
       inter >>= logbank;
     }
 
-  if (hl[i] >= 64)
+  if (HL[i] >= 64)
     {
-      int REMAIN = hl[i] - 64;
+      int REMAIN = HL[i] - 64;
       hl = REMAIN;
       int PT = 1;
 
@@ -263,7 +263,7 @@ gi (int i, UInt64 pc)
 unsigned int
 gtag (int i, UInt64 pc)
 {
-  int hl = (hl[i] < 64) ? (hl[i] % 64) : 64;
+  int hl = (HL[i] < 64) ? (HL[i] % 64) : 64;
   UInt64 inter = (hl < 64) ? (((1 << hl) - 1) & gpath[0]) : gpath[0];
 
   UInt64 res = 0;
@@ -274,7 +274,7 @@ gtag (int i, UInt64 pc)
       inter ^= ((inter & 31) << 14);
       inter >>= (logbank - ((nhist - i + logbank - 2) % (logbank - 1)));
     }
-  hl = (hl < (hl[nhist] + 1) / 2) ? hl : ((hl[nhist] + 1) / 2);
+  hl = (hl < (HL[nhist] + 1) / 2) ? hl : ((HL[nhist] + 1) / 2);
   inter ^= ((hl < 64) ? (((1 << hl) - 1) & gtargeth) : gtargeth);
   for (int t = 0; t <= hl / tagwidth; t++)
     {
@@ -283,9 +283,9 @@ gtag (int i, UInt64 pc)
       inter >>= tagwidth;
     }
 
-  if (hl[i] >= 64)
+  if (HL[i] >= 64)
     {
-      int REMAIN = hl[i] - 64;
+      int REMAIN = HL[i] - 64;
       hl = REMAIN;
       int PT = 1;
 
