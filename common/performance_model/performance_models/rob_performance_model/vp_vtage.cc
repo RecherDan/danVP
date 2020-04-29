@@ -107,11 +107,14 @@ void setglobals(int a) {
 		tagwidth=11;
 		nbbank=47;
 		nhist=8;
-		hl[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127, 0, 0, 0, 0, 0, 0, 0 };
+		int hl2[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127, 0, 0, 0, 0, 0, 0, 0 };
 		logstr=4;
 		nbwaystr=3;
 		tagwidthstr=14;
 		logstride=20;
+		for ( int i = 0; i < 15; ++i ) {
+			hl[i] = hl2[i];
+		}
 
 	}
 	if ( a==2 ) {
@@ -122,12 +125,14 @@ void setglobals(int a) {
 		tagwidth=15;
 		nbbank=63;
 		nhist=14;
-		hl[15] = { 0, 0, 1, 3, 7, 15, 31, 47, 63, 95, 127, 191, 255, 383, 511 };
+		int hl2[15] = { 0, 0, 1, 3, 7, 15, 31, 47, 63, 95, 127, 191, 255, 383, 511 };
 		logstr=20;
 		nbwaystr=3;
 		tagwidthstr=15;
 		logstride=30;
-
+		for ( int i = 0; i < 15; ++i ) {
+			hl[i] = hl2[i];
+		}
 	}
 	maxconfid=((1<< WIDTHCONFID)-1);
 	maxconfidstr=((1<< WIDTHCONFIDSTR)-1);
