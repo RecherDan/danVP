@@ -1,4 +1,5 @@
 #include "vp_vtage.h"
+/*
 #define K8
 #ifdef K8
 // 8KB
@@ -18,8 +19,8 @@ int seq_commit;
 #define TAGWIDTHSTR 14
 #define LOGSTRIDE 20
 #endif
-
-
+*/
+/*
 // 32KB //
 //#define K32
 #ifdef K32
@@ -68,20 +69,76 @@ int HL[NHIST + 1] =
 
 #endif
 //END UNLIMITED //
+*/
+/// global defintions
+int uwidth=2;
+int logldata=7;
+int logbank=5;
+int tagwidth=11;
+int nbbank=49;
 
-
+int nhist=7;
+int hl[15] = { 0, 0, 1, 3, 6, 12, 18, 30 };
+int seq_commit;
+int logstr=4;
+int nbwaystr=3;
+int tagwidthstr=14;
+int logstride=20;
 
 #define WIDTHCONFID 3
-#define MAXCONFID ((1<< WIDTHCONFID)-1)
 #define WIDTHCONFIDSTR 5
-#define MAXCONFIDSTR  ((1<< WIDTHCONFIDSTR)-1)
-#define MAXU  ((1<< UWIDTH)-1)
 
-#define BANKDATA (1<<LOGLDATA)
-#define MINSTRIDE -(1<<(LOGSTRIDE-1))
-#define MAXSTRIDE (-MINSTRIDE-1)
-#define BANKSIZE (1<<LOGBANK)
-#define PREDSIZE (NBBANK*BANKSIZE)
+int maxconfid ;
+int maxconfidstr;
+int maxu;
+int bankdata ;
+int minstride;
+int maxstride;
+int banksize;
+int predsize;
+
+
+
+void setglobals(int a) {
+	if ( a==1 ) {
+		uwidth=2;
+		logldata=9;
+		logbank=7;
+		tagwidth=11;
+		nbbank=47;
+		nhist=8;
+		hl[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127 };
+		logstr=4;
+		nbwaystr=3;
+		tagwidthstr=14;
+		logstride=20;
+
+	}
+	if ( a==2 ) {
+
+		uwidth=1;
+		logldata=20;
+		logbank=20;
+		tagwidth=15;
+		nbbank=63;
+		nhist=14;
+		hl[15] = { 0, 0, 1, 3, 7, 15, 31, 47, 63, 95, 127, 191, 255, 383, 511 };
+		logstr=20;
+		nbwaystr=3;
+		tagwidthstr=15;
+		logstride=30;
+
+	}
+	maxconfid=((1<< WIDTHCONFID)-1);
+	maxconfidstr=((1<< WIDTHCONFIDSTR)-1);
+	maxu=  ((1<< uwidth)-1);
+	bankdata=(1<<logldata);
+	minstride= -(1<<(logstride-1));
+	maxstride= (-minstride-1);
+	banksize= (1<<logbank);
+	predsize= (nbbank*banksize);
+}
+// end of global
 
 #define NOTLLCMISS (actual_latency < 150)
 #define NOTL2MISS (actual_latency < 60)
@@ -124,7 +181,7 @@ struct longdata
   UInt64 data;
   unsigned short u;
 };
-static longdata LDATA[3 * BANKDATA];
+static longdata LDATA[3 * 1048576‬];
 //  managed as a a skewed associative array
 //each entry is 64-LOGLDATA bits for the data (since the other bits can be deduced from the index) + 2 bits for u
 
@@ -138,7 +195,7 @@ struct vtentry
   //LOGLDATA +4 +WIDTHCONFID +TAGWIDTH bits
 };
 
-static vtentry Vtage[PREDSIZE];
+static vtentry Vtage[66060288‬];
 
 #define  MAXTICK 1024
 static int TICK;		//10 bits // for managing replacement on the VTAGE entries
@@ -147,7 +204,7 @@ static int LastMispVT = 0;	//8 bits //for tracking the last misprediction on VTA
 unsigned int
 gi (int i, UInt64 pc)
 {
-  int hl = (HL[i] < 64) ? (HL[i] % 64) : 64;
+  int hl = (hl[i] < 64) ? (hl[i] % 64) : 64;
   UInt64 inter = (hl < 64) ? (((1 << hl) - 1) & gpath[0]) : gpath[0];
   UInt64 res = 0;
   inter ^= (pc >> (i)) ^ (pc);
@@ -156,21 +213,21 @@ gi (int i, UInt64 pc)
     {
       res ^= inter;
       inter ^= ((inter & 15) << 16);
-      inter >>= (LOGBANK - ((NHIST - i + LOGBANK - 1) % (LOGBANK - 1)));
+      inter >>= (logbank - ((nhist - i + logbank - 1) % (logbank - 1)));
     }
-  hl = (hl < (HL[NHIST] + 1) / 2) ? hl : ((HL[NHIST] + 1) / 2);
+  hl = (hl < (hl[nhist] + 1) / 2) ? hl : ((hl[nhist] + 1) / 2);
 
   inter ^= (hl < 64) ? (((1 << hl) - 1) & gtargeth) : gtargeth;
-  for (int t = 0; t <= hl / LOGBANK; t++)
+  for (int t = 0; t <= hl / logbank; t++)
     {
       res ^= inter;
       inter ^= ((inter & 15) << 16);
-      inter >>= LOGBANK;
+      inter >>= logbank;
     }
 
-  if (HL[i] >= 64)
+  if (hl[i] >= 64)
     {
-      int REMAIN = HL[i] - 64;
+      int REMAIN = hl[i] - 64;
       hl = REMAIN;
       int PT = 1;
 
@@ -184,15 +241,15 @@ gi (int i, UInt64 pc)
 	      res ^= inter;
 	      inter ^= ((inter & 15) << 16);
 
-	      inter >>= (LOGBANK -
-			 ((NHIST - i + LOGBANK - 1) % (LOGBANK - 1)));
+	      inter >>= (logbank -
+			 ((nhist - i + logbank - 1) % (logbank - 1)));
 
 	    }
 	  REMAIN = REMAIN - 64;
 	  PT++;
 	}
     }
-  return ((unsigned int) res & (BANKSIZE - 1));
+  return ((unsigned int) res & (banksize - 1));
 }
 
 
@@ -201,7 +258,7 @@ gi (int i, UInt64 pc)
 unsigned int
 gtag (int i, UInt64 pc)
 {
-  int hl = (HL[i] < 64) ? (HL[i] % 64) : 64;
+  int hl = (hl[i] < 64) ? (hl[i] % 64) : 64;
   UInt64 inter = (hl < 64) ? (((1 << hl) - 1) & gpath[0]) : gpath[0];
 
   UInt64 res = 0;
@@ -210,20 +267,20 @@ gtag (int i, UInt64 pc)
     {
       res ^= inter;
       inter ^= ((inter & 31) << 14);
-      inter >>= (LOGBANK - ((NHIST - i + LOGBANK - 2) % (LOGBANK - 1)));
+      inter >>= (logbank - ((nhist - i + logbank - 2) % (logbank - 1)));
     }
-  hl = (hl < (HL[NHIST] + 1) / 2) ? hl : ((HL[NHIST] + 1) / 2);
+  hl = (hl < (hl[nhist] + 1) / 2) ? hl : ((hl[nhist] + 1) / 2);
   inter ^= ((hl < 64) ? (((1 << hl) - 1) & gtargeth) : gtargeth);
-  for (int t = 0; t <= hl / TAGWIDTH; t++)
+  for (int t = 0; t <= hl / tagwidth; t++)
     {
       res ^= inter;
       inter ^= ((inter & 15) << 16);
-      inter >>= TAGWIDTH;
+      inter >>= tagwidth;
     }
 
-  if (HL[i] >= 64)
+  if (hl[i] >= 64)
     {
-      int REMAIN = HL[i] - 64;
+      int REMAIN = hl[i] - 64;
       hl = REMAIN;
       int PT = 1;
 
@@ -236,7 +293,7 @@ gtag (int i, UInt64 pc)
 	    {
 	      res ^= inter;
 	      inter ^= ((inter & 31) << 14);
-	      inter >>= (TAGWIDTH - (NHIST - i - 1));
+	      inter >>= (tagwidth - (nhist - i - 1));
 
 
 	    }
@@ -245,7 +302,7 @@ gtag (int i, UInt64 pc)
 	}
     }
 
-  return ((unsigned int) res & ((1 << TAGWIDTH) - 1));
+  return ((unsigned int) res & ((1 << tagwidth) - 1));
 }
 
 
@@ -260,8 +317,8 @@ struct ForUpdate
   bool prediction_result;
   unsigned short todo;
   UInt64 pc;
-  unsigned int GI[NHIST + 1];
-  unsigned int GTAG[NHIST + 1];
+  unsigned int GI[14 + 1];
+  unsigned int GTAG[14 + 1];
   int B[NBWAYSTR];
   int TAGSTR[NBWAYSTR];
   int STHIT;
@@ -280,19 +337,19 @@ getPredVtage (ForUpdate * U, UInt64 & predicted_value)
 {
   bool predvtage = false;
   UInt64 pc = U->pc;
-  UInt64 PCindex = ((pc) ^ (pc >> 2) ^ (pc >> 5)) % PREDSIZE;
-  UInt64 PCbank = (PCindex >> LOGBANK) << LOGBANK;
+  UInt64 PCindex = ((pc) ^ (pc >> 2) ^ (pc >> 5)) % predsize;
+  UInt64 PCbank = (PCindex >> logbank) << logbank;
   int conf = 0;
-  for (int i = 1; i <= NHIST; i++)
+  for (int i = 1; i <= nhist; i++)
     {
-      U->GI[i] = (gi (i, pc) + (PCbank + (i << LOGBANK))) % PREDSIZE;
+      U->GI[i] = (gi (i, pc) + (PCbank + (i << logbank))) % predsize;
       U->GTAG[i] = gtag (i, pc);
     }
-  U->GTAG[0] = (pc ^ (pc >> 4) ^ (pc >> TAGWIDTH)) & ((1 << TAGWIDTH) - 1);
+  U->GTAG[0] = (pc ^ (pc >> 4) ^ (pc >> tagwidth)) & ((1 << tagwidth) - 1);
   U->GI[0] = PCindex;
   U->HitBank = -1;
 
-  for (int i = NHIST; i >= 0; i--)
+  for (int i = nhist; i >= 0; i--)
     {
       if (Vtage[U->GI[i]].tag == U->GTAG[i])
 	{
@@ -307,11 +364,11 @@ getPredVtage (ForUpdate * U, UInt64 & predicted_value)
     if (U->HitBank >= 0)
       {
 	int index = Vtage[U->GI[U->HitBank]].hashpt;
-	if (index < 3 * BANKDATA)
+	if (index < 3 * bankdata)
 	  {
 	    // the hash and the data are both present
 	    predicted_value = LDATA[index].data;
-	    predvtage = ((Vtage[U->GI[U->HitBank]].conf >= MAXCONFID));
+	    predvtage = ((Vtage[U->GI[U->HitBank]].conf >= maxconfid));
 	    conf = Vtage[U->GI[U->HitBank]].conf;
 	  }
       }
@@ -467,8 +524,8 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 			(actual_value >> 13) ^ (actual_value >> 21) ^
 			(actual_value >> 29) ^ (actual_value >> 34) ^
 			(actual_value >> 43) ^ (actual_value >> 52) ^
-			(actual_value >> 57)) & (BANKDATA - 1)) +
-    3 * BANKDATA;
+			(actual_value >> 57)) & (bankdata - 1)) +
+    3 * bankdata;
   bool ShouldWeAllocate = true;
   std::cout <<" hitbank: " << std::dec <<  U->HitBank << std::endl;
   if (U->HitBank != -1)
@@ -484,8 +541,8 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 	  //  update the prediction
 	  UInt64 indindex = Vtage[index].hashpt;
 	  ShouldWeAllocate =
-	    ((indindex >= 3 * BANKDATA) & (indindex != HashData))
-	    || ((indindex < 3 * BANKDATA) &
+	    ((indindex >= 3 * bankdata) & (indindex != HashData))
+	    || ((indindex < 3 * bankdata) &
 		(LDATA[indindex].data != actual_value));
 	  std::cout << "should we allocate: " << ShouldWeAllocate << std::endl;
 	  if (!ShouldWeAllocate)
@@ -493,38 +550,38 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 	      // the predicted result is satisfactory: either a good hash without data, or a pointer on the correct data
 	      ShouldWeAllocate = false;
 	      std::cout << "confidence before: " << Vtage[index].conf << std::endl;
-	      if (Vtage[index].conf < MAXCONFID)
+	      if (Vtage[index].conf < maxconfid)
 		if (vtageupdateconf (U, actual_value, actual_latency))
 		  Vtage[index].conf++;
 
-	      if (Vtage[index].u < MAXU)
+	      if (Vtage[index].u < maxu)
 		if ((VtageUpdateU (U, actual_value, actual_latency))
-		    || (Vtage[index].conf == MAXCONFID))
+		    || (Vtage[index].conf == maxconfid))
 
 		  Vtage[index].u++;
-	      if (indindex < 3 * BANKDATA)
+	      if (indindex < 3 * bankdata)
 		if (LDATA[indindex].u < 3)
-		  if (Vtage[index].conf == MAXCONFID)
+		  if (Vtage[index].conf == maxconfid)
 		    LDATA[indindex].u++;
 
 
-	      if (indindex >= 3 * BANKDATA)
+	      if (indindex >= 3 * bankdata)
 		{
 
 		  //try to allocate an effective data entry when the confidence has reached a reasonable level
-		  if (Vtage[index].conf >= MAXCONFID - 1)
+		  if (Vtage[index].conf >= maxconfid - 1)
 		    {
 		      int X[3];
 		      for (int i = 0; i < 3; i++)
 			X[i] =
 			  (((actual_value) ^
-			    (actual_value >> (LOGLDATA + (i + 1))) ^
-			    (actual_value >> (3 * (LOGLDATA + (i + 1)))) ^
-			    (actual_value >> (4 * (LOGLDATA + (i + 1)))) ^
-			    (actual_value >> (5 * (LOGLDATA + (i + 1)))) ^
-			    (actual_value >> (6 * (LOGLDATA + (i + 1)))) ^
-			    (actual_value >> (2 * (LOGLDATA + (i + 1))))) &
-			   ((1 << LOGLDATA) - 1)) + i * (1 << LOGLDATA);
+			    (actual_value >> (logldata + (i + 1))) ^
+			    (actual_value >> (3 * (logldata + (i + 1)))) ^
+			    (actual_value >> (4 * (logldata + (i + 1)))) ^
+			    (actual_value >> (5 * (logldata + (i + 1)))) ^
+			    (actual_value >> (6 * (logldata + (i + 1)))) ^
+			    (actual_value >> (2 * (logldata + (i + 1))))) &
+			   ((1 << logldata) - 1)) + i * (1 << logldata);
 		      bool done = false;
 		      for (int i = 0; i < 3; i++)
 			{
@@ -587,18 +644,18 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 
 
 	      Vtage[index].hashpt = HashData;
-	      if ((Vtage[index].conf > MAXCONFID / 2)
-		  || ((Vtage[index].conf == MAXCONFID / 2) &
+	      if ((Vtage[index].conf > maxconfid / 2)
+		  || ((Vtage[index].conf == maxconfid / 2) &
 		      (Vtage[index].u == 3))
 		  || ((Vtage[index].conf > 0) &
-		      (Vtage[index].conf < MAXCONFID / 2)))
+		      (Vtage[index].conf < maxconfid / 2)))
 		MedConf = true;
 
-	      if (Vtage[index].conf == MAXCONFID)
+	      if (Vtage[index].conf == maxconfid)
 		{
 
-		  Vtage[index].u = (Vtage[index].conf == MAXCONFID);
-		  Vtage[index].conf -= (MAXCONFID + 1) / 4;
+		  Vtage[index].u = (Vtage[index].conf == maxconfid);
+		  Vtage[index].conf -= (maxconfid + 1) / 4;
 		}
 	      else
 		{
@@ -637,18 +694,18 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 	    if (DEP > 1)
 	      {
 
-		for (int i = DEP; i <= NHIST; i++)
+		for (int i = DEP; i <= nhist; i++)
 		  {
 		    int index = U->GI[i];
 	    	 std::cout <<"before updating, u: " << Vtage[index].u << " hashpt: " <<  Vtage[index].hashpt << " tag: " << Vtage[index].tag  << std::endl;
 		    if ((Vtage[index].u == 0)
-			&& ((Vtage[index].conf == MAXCONFID / 2)
+			&& ((Vtage[index].conf == maxconfid / 2)
 			    || (Vtage[index].conf <=
-				(random() & MAXCONFID))))
+				(random() & maxconfid))))
 //slightly favors the entries with real confidence
 		      {
 			Vtage[index].hashpt = HashData;
-			Vtage[index].conf = MAXCONFID / 2;	//set to 3  for faster warming to  high confidence
+			Vtage[index].conf = maxconfid / 2;	//set to 3  for faster warming to  high confidence
 			Vtage[index].tag = U->GTAG[i];
 			ALL++;
 
@@ -673,15 +730,15 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 	    	 std::cout <<"before updating, u: " << Vtage[index].u << " hashpt: " <<  Vtage[index].hashpt << " tag: " << Vtage[index].tag  << std::endl;
 
 		    if ((Vtage[index].u == 0)
-			&& ((Vtage[index].conf == MAXCONFID / 2)
+			&& ((Vtage[index].conf == maxconfid / 2)
 			    || (Vtage[index].conf <=
-				(random() & MAXCONFID))))
+				(random() & maxconfid))))
 		      {
 			Vtage[index].hashpt = HashData;
-			Vtage[index].conf = MAXCONFID / 2;
+			Vtage[index].conf = maxconfid / 2;
 			if (U->NbOperand == 0)
 			  if (U->INSTTYPE == aluInstClass)
-			    Vtage[index].conf = MAXCONFID;
+			    Vtage[index].conf = maxconfid;
 			Vtage[index].tag = U->GTAG[i];
 			  std::cout <<"updating, tag: " << Vtage[index].tag << " hashpt: " <<  Vtage[index].hashpt << " conf: " << Vtage[index].conf << std::endl;
 			ALL++;
@@ -704,7 +761,7 @@ UpdateVtagePred (ForUpdate * U, UInt64 actual_value, int actual_latency)
 	    if (TICK >= MAXTICK)
 	      {
 
-		for (int i = 0; i < PREDSIZE; i++)
+		for (int i = 0; i < predsize; i++)
 		  if (Vtage[i].u > 0)
 		    Vtage[i].u--;
 		TICK = 0;

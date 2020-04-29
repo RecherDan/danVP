@@ -39,5 +39,5 @@ Vtage_updatePredictor (UInt64
 		 seq_no,
 		 UInt64
 		 actual_addr, UInt64 actual_value, UInt64 actual_latency);
-
+void setglobals(int a);
 #endif // __VALUEPREDICTION_H

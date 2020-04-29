@@ -124,6 +124,14 @@ ValuePrediction::ValuePrediction(Core* core) {
 		std::cout << "VALUE Predictior: VTAGE" << std::endl;
 		m_vptype = VP_VTAGE;
 	}
+	if ( Sim()->getConfig()->getVTAGESize() == Config::K32 ) {
+		std::cout << "VALUE Predictior VTAGE size set to: K32" << std::endl;
+		setglobals(1);
+	}
+	if ( Sim()->getConfig()->getVTAGESize() == Config::UNLIMITED ) {
+		std::cout << "VALUE Predictior VTAGE size set to: UNLIMITED" << std::endl;
+		setglobals(2);
+	}
     this->m_mispredict_penalty = 100;
     this->m_mispredict_penalty = Sim()->getConfig()->getVPpenalty();
 	return;	
