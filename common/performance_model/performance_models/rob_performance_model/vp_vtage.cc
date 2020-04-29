@@ -324,8 +324,8 @@ struct ForUpdate
   UInt64 pc;
   unsigned int GI[14 + 1];
   unsigned int GTAG[14 + 1];
-  int B[NBWAYSTR];
-  int TAGSTR[NBWAYSTR];
+  int B[3];
+  int TAGSTR[3];
   int STHIT;
   int HitBank;
   short INSTTYPE;
