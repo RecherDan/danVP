@@ -110,7 +110,7 @@ Config::Config(SimulationMode mode)
    m_circular_log_enabled = Sim()->getCfg()->getBool("log/circular_log");
 
    m_VPtype = (Sim()->getCfg()->getString("VP/type").compare("VP_SIMPLE") == 0 ) ? VP_SIMPLE : ((Sim()->getCfg()->getString("VP/type").compare("VP_VTAGE") == 0 ) ? VP_VTAGE : DISABLE);
-   m_VTAGESize = (Sim()->getCfg()->getString("VP/VTAGESize").compare("8K") == 0 ) ? 8K : ((Sim()->getCfg()->getString("VP/VTAGESize").compare("32K") == 0 ) ? 32K : UNLIMITED);
+   m_VTAGESize = (Sim()->getCfg()->getString("VP/VTAGESize").compare("8K") == 0 ) ? K8 : ((Sim()->getCfg()->getString("VP/VTAGESize").compare("32K") == 0 ) ? K32 : UNLIMITED);
    m_UOPstatus = (Sim()->getCfg()->getString("uopcache/status").compare("ENABLE") == 0 ) ? UOP_ENABLE : UOP_DISABLE;
    m_vp_penalty =  Sim()->getCfg()->getInt("VP/misspenalty");
    std::cout << "VP miss penalty: " << m_vp_penalty << std::endl;
