@@ -78,7 +78,7 @@ int tagwidth=11;
 int nbbank=49;
 
 int nhist=7;
-int hl[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0, 0 };
+int hl[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
 int seq_commit;
 int logstr=4;
 int nbwaystr=3;
@@ -107,7 +107,7 @@ void setglobals(int a) {
 		tagwidth=11;
 		nbbank=47;
 		nhist=8;
-		int hl2[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127, 0, 0, 0, 0, 0, 0, 0 };
+		int hl2[15] = { 0, 0, 3, 7, 15, 31, 63, 90, 127, 0, 0, 0, 0, 0, 0};
 		logstr=4;
 		nbwaystr=3;
 		tagwidthstr=14;
