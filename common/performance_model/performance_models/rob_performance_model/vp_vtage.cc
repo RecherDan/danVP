@@ -78,7 +78,7 @@ UInt64 tagwidth=11;
 UInt64 nbbank=49;
 
 UInt64 nhist=7;
-UInt64 HL[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
+int HL[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
 UInt64 seq_commit;
 UInt64 logstr=4;
 UInt64 nbwaystr=3;
@@ -115,7 +115,7 @@ void VTAGE_setglobals(int a) {
 		nbwaystr=3;
 		tagwidthstr=14;
 		logstride=20;
-		for ( int i = 0; i < 15; ++i ) {
+		for ( unsigned int i = 0; i < 15; ++i ) {
 			HL[i] = hl2[i];
 		}
 
@@ -134,7 +134,7 @@ void VTAGE_setglobals(int a) {
 		nbwaystr=3;
 		tagwidthstr=15;
 		logstride=30;
-		for ( int i = 0; i < 15; ++i ) {
+		for ( unsigned int i = 0; i < 15; ++i ) {
 			HL[i] = hl2[i];
 		}
 	}
@@ -349,7 +349,7 @@ getPredVtage (ForUpdate * U, UInt64 & predicted_value)
   UInt64 PCindex = ((pc) ^ (pc >> 2) ^ (pc >> 5)) % predsize;
   UInt64 PCbank = (PCindex >> logbank) << logbank;
   int conf = 0;
-  for (int i = 1; i <= nhist; i++)
+  for (unsigned int i = 1; i <= nhist; i++)
     {
       U->GI[i] = (gi (i, pc) + (PCbank + (i << logbank))) % predsize;
       U->GTAG[i] = gtag (i, pc);
@@ -358,7 +358,7 @@ getPredVtage (ForUpdate * U, UInt64 & predicted_value)
   U->GI[0] = PCindex;
   U->HitBank = -1;
 
-  for (int i = nhist; i >= 0; i--)
+  for (unsigned int i = nhist; i >= 0; i--)
     {
       if (Vtage[U->GI[i]].tag == U->GTAG[i])
 	{
