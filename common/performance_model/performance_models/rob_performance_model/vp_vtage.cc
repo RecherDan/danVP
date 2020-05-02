@@ -99,7 +99,10 @@ int predsize;
 
 
 
-void setglobals(int a) {
+void VTAGE_setglobals(int a) {
+	//default is 8k
+
+	// 32K option
 	if ( a==1 ) {
 		uwidth=2;
 		logldata=9;
@@ -117,6 +120,7 @@ void setglobals(int a) {
 		}
 
 	}
+	// unlimited option
 	if ( a==2 ) {
 
 		uwidth=1;

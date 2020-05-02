@@ -108,6 +108,7 @@ public:
    bool getEnableSyscallEmulation() const { return m_knob_enable_syscall_emulation; }
    VPTYPE getVPtype() const { return m_VPtype; }
    VTAGESIZE getVTAGESize() const { return m_VTAGESize; }
+   VTAGESIZE getVPSIMSize() const { return m_VPSIMSize; }
    UOPSTATUS getUOPstatus() const { return m_UOPstatus; }
    UInt32 getVPpenalty() const { return m_vp_penalty; }
    bool getVPdebug() const { return m_VP_debug; }
@@ -142,6 +143,7 @@ private:
    static Config *m_singleton;
    VPTYPE m_VPtype;
    VTAGESIZE m_VTAGESize;
+   VTAGESIZE m_VPSIMSize;
    UOPSTATUS m_UOPstatus;
    bool m_VP_debug;
    bool m_UOP_debug;

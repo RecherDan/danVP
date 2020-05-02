@@ -41,7 +41,7 @@ VPSIM_updatePredictor (UInt64
 		 UInt64
 		 actual_addr, UInt64 actual_value, UInt64 actual_latency);
 bool VPSIM_invalidateEntry(UInt64 actual_addr);
-
+void VPSIM_setglobals(int a);
 
 
 #endif /* COMMON_PERFORMANCE_MODEL_PERFORMANCE_MODELS_ROB_PERFORMANCE_MODEL_VP_SIMPLE_H_ */

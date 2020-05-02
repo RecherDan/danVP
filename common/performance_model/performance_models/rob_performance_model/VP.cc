@@ -124,13 +124,29 @@ ValuePrediction::ValuePrediction(Core* core) {
 		std::cout << "VALUE Predictior: VTAGE" << std::endl;
 		m_vptype = VP_VTAGE;
 	}
+	if ( Sim()->getConfig()->getVTAGESize() == Config::K8 ) {
+		std::cout << "VALUE Predictior VTAGE size set to: K8" << std::endl;
+		VTAGE_setglobals(0);
+	}
 	if ( Sim()->getConfig()->getVTAGESize() == Config::K32 ) {
 		std::cout << "VALUE Predictior VTAGE size set to: K32" << std::endl;
-		setglobals(1);
+		VTAGE_setglobals(1);
 	}
 	if ( Sim()->getConfig()->getVTAGESize() == Config::UNLIMITED ) {
 		std::cout << "VALUE Predictior VTAGE size set to: UNLIMITED" << std::endl;
-		setglobals(2);
+		VTAGE_setglobals(2);
+	}
+	if ( Sim()->getConfig()->getVPSIMSize() == Config::K8 ) {
+		std::cout << "VALUE Predictior VPSIM size set to: K8" << std::endl;
+		VPSIM_setglobals(0);
+	}
+	if ( Sim()->getConfig()->getVPSIMSize() == Config::K32 ) {
+		std::cout << "VALUE Predictior VPSIM size set to: K32" << std::endl;
+		VPSIM_setglobals(1);
+	}
+	if ( Sim()->getConfig()->getVPSIMSize() == Config::UNLIMITED ) {
+		std::cout << "VALUE Predictior VPSIM size set to: UNLIMITED" << std::endl;
+		VPSIM_setglobals(2);
 	}
     this->m_mispredict_penalty = 100;
     this->m_mispredict_penalty = Sim()->getConfig()->getVPpenalty();

@@ -8,9 +8,52 @@
 #include "simulator.h"
 static VPSIM_ENTRY vpSim[VPSIMWAYCOUNT+10][VPSIMNUMOFENTRIES+10];
 
+//#define SETSIZE 10
+//#define OFFSET 5
+//#define VPSIMNUMOFENTRIES 2^SETSIZE
+//#define VPSIMWAYCOUNT 4
+//#define MAXCONF 7
+//#define VPSIMPLEDEBUG
+int vpsim_waycount = 10;
+int vpsim_entries;
+int vpsim_offset =5;
+int vpsim_setsize =10;
+int vpmaxconf =7;
+int entrysize = 10;
+
+void VPSIM_setglobals(int a) {
+	// 8k option
+	if ( a== 0 ) {
+		vpsim_waycount = 10;
+		vpsim_offset =5;
+		vpsim_setsize =10;
+		vpmaxconf =7;
+		entrysize = 10;
+
+	}
+
+	// 32K option
+	if ( a ==1 ) {
+		vpsim_waycount = 10;
+		vpsim_offset =5;
+		vpsim_setsize =10;
+		vpmaxconf =7;
+		entrysize = 10;
+	}
+
+	// unlimited size option
+	if ( a==2 ) {
+		vpsim_waycount = 10;
+		vpsim_offset =5;
+		vpsim_setsize =10;
+		vpmaxconf =7;
+		entrysize = 10;
+	}
+	vpsim_entries = 2^vpsim_setsize;
+}
 void
 VPSIM_updateLRU(int hitbank, int set) {
-	for ( int i=0; i<VPSIMWAYCOUNT; i++ ) {
+	for ( int i=0; i<vpsim_waycount; i++ ) {
 		if ( i == hitbank ) continue;
 		if ( vpSim[i][set].LRU <= vpSim[hitbank][set].LRU )
 			vpSim[i][set].LRU++;
@@ -19,8 +62,8 @@ VPSIM_updateLRU(int hitbank, int set) {
 }
 
 uint VPSIM_getset(uint64_t pc) {
-	//int set = (pc/(2^OFFSET)) % SETSIZE;
-	uint set = pc% SETSIZE;
+	//int set = (pc/(2^vpsim_offset)) % vpsim_setsize;
+	uint set = pc% vpsim_setsize;
 	return set;
 }
 bool VPSIM_invalidateEntry(UInt64 pc) {
@@ -29,7 +72,7 @@ bool VPSIM_invalidateEntry(UInt64 pc) {
 	if (  Sim()->getConfig()->getVPdebug() )
 		std::cout << "DEBUG: VPSIM_invalidateEntry PC: " << std::hex << pc << std::dec << std::endl;
 
-	for( int i=0; i < VPSIMWAYCOUNT; i++ ) {
+	for( int i=0; i < vpsim_waycount; i++ ) {
 		if ( vpSim[i][set].valid && vpSim[i][set].pc == pc ) {
 			hitbank=i;
 			break;
@@ -50,7 +93,7 @@ VPSIM_getPrediction (UInt64 seq_no, UInt64 pc, UInt64 piece,
 		std::cout << "DEBUG: VPSIM_getPrediction PC: " << std::hex << pc << std::dec << std::endl;
 
 // find match
-	for( int i=0; i < VPSIMWAYCOUNT; i++ ) {
+	for( int i=0; i < vpsim_waycount; i++ ) {
 		if ( vpSim[i][set].valid && vpSim[i][set].pc == pc ) {
 			hitbank=i;
 			break;
@@ -61,7 +104,7 @@ VPSIM_getPrediction (UInt64 seq_no, UInt64 pc, UInt64 piece,
 	if ( hitbank == -1 ) return false;
 	if (  Sim()->getConfig()->getVPdebug() )
 		std::cout << "DEBUG: VPSIM_getPrediction hit: pc: " << std::hex << vpSim[hitbank][set].pc << std::dec << " conf: " << vpSim[hitbank][set].conf << " value: " << std::hex << vpSim[hitbank][set].value << std::dec << std::endl;
-	if ( vpSim[hitbank][set].conf < MAXCONF ) return false;
+	if ( vpSim[hitbank][set].conf < vpmaxconf ) return false;
 	predicted_value =  vpSim[hitbank][set].value;
 	// update LRU
 	if ( vpSim[hitbank][set].LRU != 0 ) {
@@ -81,7 +124,7 @@ void VPSIM_updatePredictor (UInt64
 	if (  Sim()->getConfig()->getVPdebug() )
 		std::cout << "DEBUG: VPSIM_updatePredictor pc: " << std::hex << actual_addr << std::dec << " value: " << std::hex << actual_value << std::dec << std::endl;
 // find match
-	for( int i=0; i < VPSIMWAYCOUNT; i++ ) {
+	for( int i=0; i < vpsim_waycount; i++ ) {
 		if ( vpSim[i][set].pc == actual_addr ) {
 			hitbank=i;
 			break;
@@ -95,7 +138,7 @@ void VPSIM_updatePredictor (UInt64
 		if ( vpSim[hitbank][set].value == actual_value ) {
 			if (  Sim()->getConfig()->getVPdebug() )
 				std::cout << "DEBUG: VPSIM_updatePredictor match value conf: " << vpSim[hitbank][set].conf  << std::endl;
-			if ( vpSim[hitbank][set].conf != MAXCONF ) {
+			if ( vpSim[hitbank][set].conf != vpmaxconf ) {
 				vpSim[hitbank][set].conf++;
 			}
 		} else {
@@ -109,7 +152,7 @@ void VPSIM_updatePredictor (UInt64
 		//find victim
 		int victimbank = -1;
 		int LRU = -1;
-		for( int i=0; i < VPSIMWAYCOUNT; i++ ) {
+		for( int i=0; i < vpsim_waycount; i++ ) {
 			if ( vpSim[i][set].valid == false ) {
 				victimbank = i;
 				break;
