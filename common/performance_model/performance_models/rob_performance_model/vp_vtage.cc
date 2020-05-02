@@ -71,31 +71,31 @@ int HL[NHIST + 1] =
 //END UNLIMITED //
 */
 /// global defintions
-int uwidth=2;
-int logldata=7;
-int logbank=5;
-int tagwidth=11;
-int nbbank=49;
+UInt64 uwidth=2;
+UInt64 logldata=7;
+UInt64 logbank=5;
+UInt64 tagwidth=11;
+UInt64 nbbank=49;
 
-int nhist=7;
-int HL[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
-int seq_commit;
-int logstr=4;
-int nbwaystr=3;
-int tagwidthstr=14;
-int logstride=20;
+UInt64 nhist=7;
+UInt64 HL[15] = { 0, 0, 1, 3, 6, 12, 18, 30, 0, 0, 0, 0, 0, 0, 0 };
+UInt64 seq_commit;
+UInt64 logstr=4;
+UInt64 nbwaystr=3;
+UInt64 tagwidthstr=14;
+UInt64 logstride=20;
 
 #define WIDTHCONFID 3
 #define WIDTHCONFIDSTR 5
 
-int maxconfid ;
-int maxconfidstr;
-int maxu;
-int bankdata ;
-int minstride;
-int maxstride;
-int banksize;
-int predsize;
+UInt64 maxconfid ;
+UInt64 maxconfidstr;
+UInt64 maxu;
+UInt64 bankdata ;
+UInt64 minstride;
+UInt64 maxstride;
+UInt64 banksize;
+UInt64 predsize;
 
 
 
