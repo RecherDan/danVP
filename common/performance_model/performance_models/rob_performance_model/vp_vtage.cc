@@ -122,7 +122,7 @@ void VTAGE_setglobals(int a) {
 	}
 	// unlimited option
 	if ( a==2 ) {
-
+		std::cout << "VALUE Predictior VTAGE::setglobals size set to: UNLIMITED" << std::endl;
 		uwidth=1;
 		logldata=20;
 		logbank=20;
