@@ -186,7 +186,7 @@ struct longdata
   UInt64 data;
   unsigned short u;
 };
-static longdata LDATA[3145728];
+static longdata LDATA[31457280];
 //  managed as a a skewed associative array
 //each entry is 64-LOGLDATA bits for the data (since the other bits can be deduced from the index) + 2 bits for u
 
