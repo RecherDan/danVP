@@ -190,7 +190,7 @@ struct longdata
   UInt64 data;
   unsigned short u;
 };
-static longdata LDATA[31457280];
+static longdata LDATA[314572800];
 //  managed as a a skewed associative array
 //each entry is 64-LOGLDATA bits for the data (since the other bits can be deduced from the index) + 2 bits for u
 
@@ -204,7 +204,7 @@ struct vtentry
   //LOGLDATA +4 +WIDTHCONFID +TAGWIDTH bits
 };
 
-static vtentry Vtage[66060288];
+static vtentry Vtage[660602880];
 
 #define  MAXTICK 1024
 static int TICK;		//10 bits // for managing replacement on the VTAGE entries

@@ -21,12 +21,18 @@ int vpsim_setsize =10;
 int vpmaxconf =7;
 int entrysize = 10;
 
+// size is: num_of_bits 19 * num of entries * num of ways
+// num of bits log2(vpmaxconf) = 3 + log2(tag) =15 + log2(validsize) = 1 ==> 19
+// 8K ==> 19 * 2^8 * 2
+// 32K ==> 19 * 2^9 * 4
+// UNLIMITED ==> 19 * 2^10 * 8
+
 void VPSIM_setglobals(int a) {
 	// 8k option
 	if ( a== 0 ) {
-		vpsim_waycount = 10;
+		vpsim_waycount = 2;
 		vpsim_offset =5;
-		vpsim_setsize =10;
+		vpsim_setsize =8;
 		vpmaxconf =7;
 		entrysize = 10;
 
@@ -34,16 +40,16 @@ void VPSIM_setglobals(int a) {
 
 	// 32K option
 	if ( a ==1 ) {
-		vpsim_waycount = 10;
+		vpsim_waycount = 4;
 		vpsim_offset =5;
-		vpsim_setsize =10;
+		vpsim_setsize =9;
 		vpmaxconf =7;
 		entrysize = 10;
 	}
 
 	// unlimited size option
 	if ( a==2 ) {
-		vpsim_waycount = 10;
+		vpsim_waycount = 8;
 		vpsim_offset =5;
 		vpsim_setsize =10;
 		vpmaxconf =7;
