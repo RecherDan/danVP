@@ -69,7 +69,7 @@ class Data:
     line = ""
     for a in keys:
 	    line = line + ", " + str(VPStats[a].value)
-    os.system('echo ' + name + ', ' + str(penalty) + ', ' + str(cycles) + ', ' + str(round(IPC,2)) + ', ' + str(instructions) +  line + ' >> ' + self.csv);    
+    os.system('echo ' + name + ', ' + str(specname) + ', ' + str(testname) + ', ' + str(penalty) + ', ' + str(cycles) + ', ' + str(round(IPC,2)) + ', ' + str(instructions) +  line + ' >> ' + self.csv);    
     #os.system('printf "%s, %d, %.2f, %d %s" ' + name + ' ' + cycles + ' ' + IPC + ' ' + instructions + ' ' + line + ' >> ' + self.csv);
 class Test:
   def __init__(self, specname, testname, name, config, trace, penalty, test, input ,configparams):
@@ -193,7 +193,7 @@ def PrintResult():
 	global defaultparams
 	for stat, v in sorted(total.VPstats.items()):
 		total.VPstats[stat].setIf(total.VPstats[stat].value/total.instructions);
-	total.addline("Total " + configname, "", "Total", "Total", total.cycles/total.instructions, total.IPC/total.instructions, total.instructions/total.testscount, total.VPstats)
+	total.addline("Total " + configname,  "Total", "Total", "", total.cycles/total.instructions, total.IPC/total.instructions, total.instructions/total.testscount, total.VPstats)
 	print("Total Results " + configname)
 	print("		%-40s: %10d" % ("instrctions" , total.instructions/total.testscount))
 	print("		%-40s: %10d" % ("cycles" , total.cycles/total.instructions))
