@@ -63,8 +63,8 @@ class Data:
     line = ""
     for a in keys:
 	    line = line + ", " + str(a)
-    os.system('echo name, penalty, cycles, IPC, instructions ' + line + ' > ' + self.csv);
-  def addline(self, name, penalty, cycles, IPC, instructions, VPStats):
+    os.system('echo name, SPEC, TEST, penalty, cycles, IPC, instructions ' + line + ' > ' + self.csv);
+  def addline(self, name, specname, testname, penalty, cycles, IPC, instructions, VPStats):
     global keys
     line = ""
     for a in keys:
@@ -72,9 +72,11 @@ class Data:
     os.system('echo ' + name + ', ' + str(penalty) + ', ' + str(cycles) + ', ' + str(round(IPC,2)) + ', ' + str(instructions) +  line + ' >> ' + self.csv);    
     #os.system('printf "%s, %d, %.2f, %d %s" ' + name + ' ' + cycles + ' ' + IPC + ' ' + instructions + ' ' + line + ' >> ' + self.csv);
 class Test:
-  def __init__(self, name, config, trace, penalty, test, input ,configparams):
+  def __init__(self, specname, testname, name, config, trace, penalty, test, input ,configparams):
     global test_dir
     global defaultinstructionscount
+    self.specname = specname
+    self.testname = testname;
     self.name = name
     self.trace = trace.trace;
     self.test = test
@@ -173,7 +175,7 @@ def CollectData(testlist):
 	global total
 	for test in testlist:
 		print("Test: %s elapsed Time: %d seconds " % (test.name, test.elapsedTime))
-		total.addline(test.name, test.penalty, test.cycles, test.IPC, test.instructions , test.VPstats)
+		total.addline(test.name, test.specname, test.testname, test.penalty, test.cycles, test.IPC, test.instructions , test.VPstats)
 		print("		%-40s: %10d" % ("instrctions" , test.instructions))
 		print("		%-40s: %10d" % ("cycles" , test.cycles))
 		print("		%-40s: %10.2f" % ("IPC", test.IPC))
@@ -191,7 +193,7 @@ def PrintResult():
 	global defaultparams
 	for stat, v in sorted(total.VPstats.items()):
 		total.VPstats[stat].setIf(total.VPstats[stat].value/total.instructions);
-	total.addline("Total " + configname, "", total.cycles/total.instructions, total.IPC/total.instructions, total.instructions/total.testscount, total.VPstats)
+	total.addline("Total " + configname, "", "Total", "Total", total.cycles/total.instructions, total.IPC/total.instructions, total.instructions/total.testscount, total.VPstats)
 	print("Total Results " + configname)
 	print("		%-40s: %10d" % ("instrctions" , total.instructions/total.testscount))
 	print("		%-40s: %10d" % ("cycles" , total.cycles/total.instructions))
@@ -212,7 +214,7 @@ def GenNewTest(testTraces, name, penalty, config):
 	testlist = []
 	NewConfig(name, config)
 	for trace in testTraces:
-		testlist.append(Test(trace.name + "_" +  name,"vp_" + name, trace, penalty, "", "", ""))
+		testlist.append(Test(trace.name,name,trace.name + "_" +  name,"vp_" + name, trace, penalty, "", "", ""))
 	RunTests(testlist)
 
 SPECDIR = "/home/danr/SPEC-CPU2017v1.0.1/"
