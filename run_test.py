@@ -302,10 +302,10 @@ testlist = []
 ##############################################
 
 
-GenNewTest(testTraces,"clean", 10, "")
-GenNewTest(testTraces,"VP_VTAGE_8k", 10, "")
-GenNewTest(testTraces,"VP_VTAGE_32k", 10, "")
-GenNewTest(testTraces,"VP_VTAGE_unlimited", 10, "")
-GenNewTest(testTraces,"VP_SIMPLE_8k", 10, "")
-GenNewTest(testTraces,"VP_SIMPLE_32k", 10, "")
-GenNewTest(testTraces,"VP_SIMPLE_unlimited", 10, "")
+GenNewTest(testTraces,"clean", 5, "")
+GenNewTest(testTraces,"VP_VTAGE_8k", 5, "")
+GenNewTest(testTraces,"VP_VTAGE_32k", 5, "")
+GenNewTest(testTraces,"VP_VTAGE_unlimited", 5, "")
+GenNewTest(testTraces,"VP_SIMPLE_8k", 5, "")
+GenNewTest(testTraces,"VP_SIMPLE_32k", 5, "")
+GenNewTest(testTraces,"VP_SIMPLE_unlimited", 5, "")
