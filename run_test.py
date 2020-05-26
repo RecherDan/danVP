@@ -303,9 +303,9 @@ testlist = []
 
 
 GenNewTest(testTraces,"clean", 5, "")
-GenNewTest(testTraces,"VP_VTAGE_8k", 5, "")
-GenNewTest(testTraces,"VP_VTAGE_32k", 5, "")
-GenNewTest(testTraces,"VP_VTAGE_unlimited", 5, "")
-GenNewTest(testTraces,"VP_SIMPLE_8k", 5, "")
-GenNewTest(testTraces,"VP_SIMPLE_32k", 5, "")
-GenNewTest(testTraces,"VP_SIMPLE_unlimited", 5, "")
+GenNewTest(testTraces,"VP_VTAGE_8k_UOPCACHE", 5, "")
+GenNewTest(testTraces,"VP_VTAGE_32k_UOPCACHE", 5, "")
+GenNewTest(testTraces,"VP_VTAGE_unlimited_UOPCACHE", 5, "")
+GenNewTest(testTraces,"VP_SIMPLE_8k_UOPCACHE", 5, "")
+GenNewTest(testTraces,"VP_SIMPLE_32k_UOPCACHE", 5, "")
+GenNewTest(testTraces,"VP_SIMPLE_unlimited_UOPCACHE", 5, "")
