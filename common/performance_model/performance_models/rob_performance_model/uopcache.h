@@ -5,7 +5,8 @@
 #include "fixed_types.h"
 
 
-#define UOPCACHELINES 64000
+//#define UOPCACHELINES 64000
+#define UOPCACHELINES 640
 #define UOPWAYS 8
 #define UOPCONFLIMIT 0
 #define MAXVPINFO 10
