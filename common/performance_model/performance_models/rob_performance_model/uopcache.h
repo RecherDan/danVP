@@ -6,8 +6,8 @@
 
 
 //#define UOPCACHELINES 64000
-#define UOPCACHELINES 64
-#define UOPWAYS 1
+#define UOPCACHELINES 64000
+#define UOPWAYS 8
 #define UOPCONFLIMIT 0
 #define MAXVPINFO 10
 
@@ -45,7 +45,7 @@ class UopCache {
 	  bool uopcacheIsOn = true;
 	  bool RandomPredict();
 	  bool periodicPredict();
-	  uopline uopCache[UOPWAYS+10][UOPCACHELINES+10];
+	  uopline uopCache[UOPWAYS][UOPCACHELINES+10];
 	  bool uopenabled;
 	  bool VPremovevpentry;
 
