@@ -311,15 +311,15 @@ testlist = []
 #GenNewTest(testTraces,"VP_SIMPLE_unlimited_UOPCACHE", 5, "")
 
 # branch penalty senstivity test 29.4.2020
-for i in range(0,1000):
+for i in range(0,10):
     if ( (((i % 5) == 0 ) and i < 121 ) or (((i % 100) == 0 ) and i > 101 and false ) ):
         GenNewTest(testTraces,"clean", i, "")
-        GenNewTest(testTraces,"VP_VTAGE_8k", i, "")
-        GenNewTest(testTraces,"VP_VTAGE_32k", i, "")
-        GenNewTest(testTraces,"VP_VTAGE_unlimited", i, "")
-        GenNewTest(testTraces,"VP_SIMPLE_8k", i, "")
-        GenNewTest(testTraces,"VP_SIMPLE_32k", i, "")
-        GenNewTest(testTraces,"VP_SIMPLE_unlimited", i, "")
+        #GenNewTest(testTraces,"VP_VTAGE_8k", i, "")
+        #GenNewTest(testTraces,"VP_VTAGE_32k", i, "")
+        #GenNewTest(testTraces,"VP_VTAGE_unlimited", i, "")
+        #GenNewTest(testTraces,"VP_SIMPLE_8k", i, "")
+        #GenNewTest(testTraces,"VP_SIMPLE_32k", i, "")
+        #GenNewTest(testTraces,"VP_SIMPLE_unlimited", i, "")
         GenNewTest(testTraces,"VP_VTAGE_8k_UOPCACHE", i, "")
         GenNewTest(testTraces,"VP_VTAGE_32k_UOPCACHE", i, "")
         GenNewTest(testTraces,"VP_VTAGE_unlimited_UOPCACHE", i, "")

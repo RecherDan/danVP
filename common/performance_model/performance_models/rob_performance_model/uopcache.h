@@ -6,8 +6,8 @@
 
 
 //#define UOPCACHELINES 64000
-#define UOPCACHELINES 640
-#define UOPWAYS 8
+#define UOPCACHELINES 64
+#define UOPWAYS 1
 #define UOPCONFLIMIT 0
 #define MAXVPINFO 10
 
