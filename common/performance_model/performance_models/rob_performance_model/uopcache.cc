@@ -138,6 +138,7 @@ bool UopCache::setPredictable(intptr_t pc, unsigned long bbhead, unsigned long v
 	if ( index != -1 ) {
 		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[index];
 		curVPinfo.validpredict = true;
+		this->uopCache[hitbank][set].VPinfo[index] = curVPinfo;
 		return true;
 	}
 
