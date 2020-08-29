@@ -316,7 +316,7 @@ testlist = []
 # branch penalty senstivity test 29.4.2020
 for i in range(0,10):
     if ( (((i % 5) == 0 ) and i < 121 ) or (((i % 100) == 0 ) and i > 101 and false ) ):
-        GenNewTest(testTraces,"clean", i, "")
+        #GenNewTest(testTraces,"clean", i, "")
         #GenNewTest(testTraces,"VP_VTAGE_8k", i, "")
         #GenNewTest(testTraces,"VP_VTAGE_32k", i, "")
         #GenNewTest(testTraces,"VP_VTAGE_unlimited", i, "")
