@@ -223,6 +223,9 @@ configname=""
 defaultinstructionscount="100000000"
 defaultinstructionscount="10000000"
 
+## fast debug
+defaultinstructionscount="100000"
+
 #keys = [ 'VP.VP_miss', 'VP.VP_access', 'VP.VP_haveprediction', 'VP.VP_hits', 'VP.VP_Invalidate', 'uopcache.uopcache_access', \
  #   'uopcache.uopcache_evictions', 'uopcache.uopcache_hits', 'uopcache.uopcache_miss', 'uopcache.uopcache_stores', \
   #  'uopcache.uopcache_VP_access', 'uopcache.uopcache_VP_haveprediction', 'uopcache.uopcache_VP_hits', 'uopcache.uopcache_VP_miss', \

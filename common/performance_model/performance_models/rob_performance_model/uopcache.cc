@@ -129,6 +129,20 @@ int UopCache::GetVPInfoIndex(uintptr_t pc, unsigned long bbhead) {
 	}
 	return index;
 }
+bool UopCache::setPredictable(intptr_t pc, unsigned long bbhead, unsigned long value) {
+	if ( !this->uopenabled ) return false;
+
+	unsigned long set = UopCache::getSet(bbhead);
+	int hitbank = UopCache::getWay(bbhead);
+	int index = UopCache::GetVPInfoIndex(pc, bbhead);
+	if ( index != -1 ) {
+		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[index];
+		curVPinfo.validpredict = true;
+		return true;
+	}
+
+	return false;
+}
 bool UopCache::AddVPinfo(uintptr_t pc, unsigned long bbhead, unsigned long value) {
 	if ( !this->uopenabled ) return false;
 
