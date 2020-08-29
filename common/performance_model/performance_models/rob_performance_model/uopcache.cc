@@ -110,6 +110,25 @@ bool UopCache::RandomPredict() {
 	//return true;
 	return (rand() %5 == 0 ) ? true : false;	
 }
+int UopCache::GetVPInfoIndex(uintptr_t pc, unsigned long bbhead) {
+	unsigned long set = UopCache::getSet(bbhead);
+	int hitbank = UopCache::getWay(bbhead);
+	int index = -1;
+	for ( int i = 0 ; i < MAXVPINFO ; i++) {
+		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
+		if ( curVPinfo.pc == pc ) index=i;
+	}
+	if ( index == -1 ) {
+		for ( int i = 0 ; i < MAXVPINFO ; i++) {
+			vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
+			if ( !curVPinfo.valid ) {
+				index =-1;
+				break;
+			}
+		}
+	}
+	return index;
+}
 bool UopCache::AddVPinfo(uintptr_t pc, unsigned long bbhead, unsigned long value) {
 	if ( !this->uopenabled ) return false;
 
@@ -122,17 +141,16 @@ bool UopCache::AddVPinfo(uintptr_t pc, unsigned long bbhead, unsigned long value
 			return false;
 	}
 	this->uopcache_VP_stores++;
-	for ( int i = 0 ; i < MAXVPINFO ; i++) {
-		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
-		if ( !curVPinfo.valid || curVPinfo.pc == pc ) {
-			curVPinfo.valid = true;
-			curVPinfo.validpredict = true;
-			curVPinfo.pc = pc;
-			curVPinfo.value = value;
-			this->uopCache[hitbank][set].VPinfo[i] = curVPinfo;
-			this->uopcache_VP_stores_success++;
-			return true;
-		}
+	int index = UopCache::GetVPInfoIndex(pc, bbhead);
+	if ( index != -1 ) {
+		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[index];
+		curVPinfo.valid = true;
+		curVPinfo.validpredict = true;
+		curVPinfo.pc = pc;
+		curVPinfo.value = value;
+		this->uopCache[hitbank][set].VPinfo[index] = curVPinfo;
+		this->uopcache_VP_stores_success++;
+		return true;
 	}
 	this->uopcache_VP_stores_fails++;
 	return false;

@@ -68,6 +68,7 @@ class UopCache {
 	  bool isUopCacheValid();
       bool existInUopCache(unsigned long pc);
 	  bool PredictUop(unsigned long pc,unsigned long BBhead);
+	  int GetVPInfoIndex (unsigned long pc, unsigned long bbhead);
 	  bool storeUopCache(unsigned long pc);
 	  bool checkVPinfo(unsigned long pc, unsigned long bbhead, unsigned long *value);
 	  std::tuple<bool, bool> getVPprediction(unsigned long pc, unsigned long bbhead, unsigned long value);
