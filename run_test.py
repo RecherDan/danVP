@@ -224,7 +224,7 @@ defaultinstructionscount="100000000"
 defaultinstructionscount="10000000"
 
 ## fast debug
-defaultinstructionscount="100000"
+defaultinstructionscount="1000000"
 
 #keys = [ 'VP.VP_miss', 'VP.VP_access', 'VP.VP_haveprediction', 'VP.VP_hits', 'VP.VP_Invalidate', 'uopcache.uopcache_access', \
  #   'uopcache.uopcache_evictions', 'uopcache.uopcache_hits', 'uopcache.uopcache_miss', 'uopcache.uopcache_stores', \
@@ -323,10 +323,10 @@ for i in range(0,10):
         #GenNewTest(testTraces,"VP_SIMPLE_8k", i, "")
         #GenNewTest(testTraces,"VP_SIMPLE_32k", i, "")
         #GenNewTest(testTraces,"VP_SIMPLE_unlimited", i, "")
-        GenNewTest(testTraces,"VP_VTAGE_8k_UOPCACHE", i, "")
-        GenNewTest(testTraces,"VP_VTAGE_32k_UOPCACHE", i, "")
-        GenNewTest(testTraces,"VP_VTAGE_unlimited_UOPCACHE", i, "")
+        #GenNewTest(testTraces,"VP_VTAGE_8k_UOPCACHE", i, "")
+        #GenNewTest(testTraces,"VP_VTAGE_32k_UOPCACHE", i, "")
+        #GenNewTest(testTraces,"VP_VTAGE_unlimited_UOPCACHE", i, "")
         GenNewTest(testTraces,"VP_SIMPLE_8k_UOPCACHE", i, "")
-        GenNewTest(testTraces,"VP_SIMPLE_32k_UOPCACHE", i, "")
-        GenNewTest(testTraces,"VP_SIMPLE_unlimited_UOPCACHE", i, "")
+        #GenNewTest(testTraces,"VP_SIMPLE_32k_UOPCACHE", i, "")
+        #GenNewTest(testTraces,"VP_SIMPLE_unlimited_UOPCACHE", i, "")
        

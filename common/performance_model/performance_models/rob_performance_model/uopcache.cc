@@ -159,7 +159,7 @@ bool UopCache::AddVPinfo(uintptr_t pc, unsigned long bbhead, unsigned long value
 	if ( index != -1 ) {
 		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[index];
 		curVPinfo.valid = true;
-		curVPinfo.validpredict = true;
+		curVPinfo.validpredict = false;
 		curVPinfo.pc = pc;
 		curVPinfo.value = value;
 		this->uopCache[hitbank][set].VPinfo[index] = curVPinfo;
