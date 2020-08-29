@@ -122,7 +122,7 @@ int UopCache::GetVPInfoIndex(uintptr_t pc, unsigned long bbhead) {
 		for ( int i = 0 ; i < MAXVPINFO ; i++) {
 			vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
 			if ( !curVPinfo.valid ) {
-				index =-1;
+				index = i;
 				break;
 			}
 		}
