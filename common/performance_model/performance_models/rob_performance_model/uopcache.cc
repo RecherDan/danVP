@@ -77,7 +77,7 @@ bool UopCache::PredictUop(unsigned long pc, unsigned long BBhead) {
 	}
 	// already return false if PC != BBhead
 	//if ( pc == BBhead ) {
-		UopCache::storeUopCache(BBhead);
+		UopCache::storeUopCache(BBhead, false);
 	//}
 
 	//return this->periodicPredict();
@@ -193,7 +193,11 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 	int hitbank = UopCache::getWay(bbhead);
 	if ( Sim()->getConfig()->getUOPdebug())
 		std::cout << "DEBUG: UopCache::getVPprediction PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << " set: " << set << " way: " << hitbank << " valid: " << (this->uopCache[hitbank][set].valid? "true" : "false")  << std::endl;
-	if ( !this->uopCache[hitbank][set].valid ) return fret;
+	if ( !this->uopCache[hitbank][set].valid ) {
+		UopCache::storeUopCache(bbhead, true); // pre allocation for micro-op cache to be used to get micro-op index.
+		set = UopCache::getSet(bbhead);
+		hitbank = UopCache::getWay(bbhead);
+	}
 	int vpInd = -1;
 	for ( int i = 0 ; i < MAXVPINFO ; i++ ) {
 		vpinfo curVPinfo = this->uopCache[hitbank][set].VPinfo[i];
@@ -203,6 +207,8 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 	}
 	if ( vpInd == -1 ) {
 		UopCache::AddVPinfo(pc, bbhead, value);
+	}
+	if ( vpInd == -1 || !this->uopCache[hitbank][set].valid ) {
 		return fret;
 	}
 	if ( this->uopCache[hitbank][set].VPinfo[vpInd].validpredict ) this->uopcache_VP_haveprediction++;
@@ -239,7 +245,7 @@ bool UopCache::checkVPinfo(unsigned long pc, unsigned long bbhead, unsigned long
 	}
 	return false;
 }
-bool UopCache::storeUopCache(unsigned long pc) {
+bool UopCache::storeUopCache(unsigned long pc, bool preallocation) {
 	if ( !this->uopenabled ) return false;
 
 	bool overwritten = false;
@@ -247,7 +253,7 @@ bool UopCache::storeUopCache(unsigned long pc) {
 	int hitbank = UopCache::getWay(pc);
 	if ( Sim()->getConfig()->getUOPdebug())
 		std::cout << "DEBUG: UopCache::storeUopCache store prediction of PC: " << std::hex << pc << std::dec << " set: " << set << " way: " << hitbank  << std::endl;
-
+	if ( this->uopCache[hitbank][set].valid && preallocation ) return false;
 	if ( this->uopCache[hitbank][set].valid ) {
 		if ( this->uopCache[hitbank][set].pc != pc ) {
 			overwritten = true;
@@ -270,6 +276,12 @@ bool UopCache::storeUopCache(unsigned long pc) {
 		}
 	}
 	this->uopCache[hitbank][set].valid = true;
+	this->uopCache[hitbank][set].preallocated = false;
+	if ( preallocation ) {
+		this->uopCache[hitbank][set].valid = false;
+		this->uopCache[hitbank][set].preallocated = true;
+	}
+
 	this->uopCache[hitbank][set].pc = pc;
 	UopCache::updateLRU(set, hitbank);
 	if ( overwritten ) this->uopcache_evictions++;
@@ -284,7 +296,7 @@ unsigned long UopCache::getWay(unsigned long pc) {
 	int emptyway = -1;
 	//check if pc already exist
 	for ( int i = 0 ; i < UOPWAYS ; i++) {
-		if ( ! uopCache[i][set].valid && emptyway == -1 ) emptyway = i;
+		if ( ! (uopCache[i][set].valid || uopCache[i][set].preallocated) && emptyway == -1 ) emptyway = i;
 		if ( uopCache[i][set].pc == pc ) {
 			victimbank = i;
 		}

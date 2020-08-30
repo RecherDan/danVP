@@ -66,18 +66,19 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
 	   uopVPhavePrediction = (uop_is_mispredict || uop_good_prediction);
 	   std::cout << "UOP CACHE haveprediction: " << (uopVPhavePrediction ? "TRUE" : "FALSE") <<  " good: " << (uop_good_prediction ? "TRUE" : "FALSE") << " bad: " << (uop_is_mispredict ? "TRUE" : "FALSE") << std::endl;
    }
+   uintptr_t NewPC = uopcache->GenNewPC(eip , instruction->getbbhead());
    bool is_mispredict = false;
    bool good_prediction = false;
    std::tuple<bool, bool> prediction_results;
    if (vp->isOn() && vpinfo.isEligible && !uopVPhavePrediction) {
-	   std::tie(is_mispredict,good_prediction) = ( vp->getPrediction(0,eip,0,vpinfo.value,vpinfo.NextPC, vpinfo.type, vpinfo.TypeName) );
+	   std::tie(is_mispredict,good_prediction) = ( vp->getPrediction(0,NewPC,0,vpinfo.value,vpinfo.NextPC, vpinfo.type, vpinfo.TypeName) );
 	   //is_mispredict = std::get<0>(prediction_results);
    	   //good_prediction = std::get<0>(prediction_results);
    }
    if ( uopcache->isUopCacheValid() && uopcache->getVPremovevpentry() && good_prediction ) {
 		   //uopcache->AddVPinfo(eip, instruction->getbbhead(), vpinfo.value);
 		   uopcache->setPredictable(eip, instruction->getbbhead(), vpinfo.value);
-	   	   vp->invalidateEntry(eip);
+	   	   vp->invalidateEntry(NewPC);
    }
    //*is_GoodPredicted = false;
    std::cout << "is_GoodPredicted address: " << std::hex << is_GoodPredicted << " value: " << *is_GoodPredicted << std::endl;

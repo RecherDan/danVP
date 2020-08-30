@@ -24,6 +24,7 @@ struct vpinfo
 struct uopline
 {
   bool valid;
+  bool preallocated;
   bool loaded;
   int LRU;
   bool ready;
@@ -71,7 +72,7 @@ class UopCache {
 	  bool PredictUop(unsigned long pc,unsigned long BBhead);
 	  int GetVPInfoIndex (unsigned long pc, unsigned long bbhead);
 	  bool setPredictable(uintptr_t pc, unsigned long bbhead, unsigned long value);
-	  bool storeUopCache(unsigned long pc);
+	  bool storeUopCache(unsigned long pc, bool preallocation);
 	  bool checkVPinfo(unsigned long pc, unsigned long bbhead, unsigned long *value);
 	  uintptr_t GenNewPC(uintptr_t pc, unsigned long bbhead);
 	  std::tuple<bool, bool> getVPprediction(unsigned long pc, unsigned long bbhead, unsigned long value);
