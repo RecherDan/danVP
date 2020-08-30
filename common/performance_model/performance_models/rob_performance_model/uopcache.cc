@@ -129,7 +129,7 @@ int UopCache::GetVPInfoIndex(uintptr_t pc, unsigned long bbhead) {
 	}
 	return index;
 }
-bool UopCache::setPredictable(intptr_t pc, unsigned long bbhead, unsigned long value) {
+bool UopCache::setPredictable(uintptr_t pc, unsigned long bbhead, unsigned long value) {
 	if ( !this->uopenabled ) return false;
 
 	unsigned long set = UopCache::getSet(bbhead);
@@ -143,6 +143,19 @@ bool UopCache::setPredictable(intptr_t pc, unsigned long bbhead, unsigned long v
 	}
 
 	return false;
+}
+uintptr_t UopCache::GenNewPC(uintptr_t pc, unsigned long bbhead) {
+	if ( !this->uopenabled ) return pc;
+	unsigned long set = UopCache::getSet(bbhead);
+	int hitbank = UopCache::getWay(bbhead);
+	int index = UopCache::GetVPInfoIndex(pc, bbhead);
+	if ( index == -1 ) return pc;
+	int shift = int(log2 (MAXVPINFO));
+	uintptr_t newpc = (bbhead << shift) + index;
+	if ( Sim()->getConfig()->getUOPdebug())
+				std::cout << "DEBUG: UopCache::GenNewPC generating new PC: " << std::hex << pc << " BBhead: " << bbhead << std::dec << " index: " << index << " shift: " << shift << " newpc: " << newpc << std::endl;
+
+	return newpc;
 }
 bool UopCache::AddVPinfo(uintptr_t pc, unsigned long bbhead, unsigned long value) {
 	if ( !this->uopenabled ) return false;
@@ -190,7 +203,10 @@ std::tuple<bool, bool> UopCache::getVPprediction(unsigned long pc, unsigned long
 			vpInd = i;
 		}
 	}
-	if ( vpInd == -1 ) return fret;
+	if ( vpInd == -1 ) {
+		UopCache::AddVPinfo(pc, bbhead, value);
+		return fret;
+	}
 	if ( this->uopCache[hitbank][set].VPinfo[vpInd].validpredict ) this->uopcache_VP_haveprediction++;
 	if ( value ==this->uopCache[hitbank][set].VPinfo[vpInd].value && this->uopCache[hitbank][set].VPinfo[vpInd].validpredict )
 		goodPrediction = true;

@@ -75,7 +75,7 @@ SubsecondTime DynamicInstruction::getVPCost(Core *core, bool *p_is_mispredict, b
    	   //good_prediction = std::get<0>(prediction_results);
    }
    if ( uopcache->isUopCacheValid() && uopcache->getVPremovevpentry() && good_prediction ) {
-		   uopcache->AddVPinfo(eip, instruction->getbbhead(), vpinfo.value);
+		   //uopcache->AddVPinfo(eip, instruction->getbbhead(), vpinfo.value);
 		   uopcache->setPredictable(eip, instruction->getbbhead(), vpinfo.value);
 	   	   vp->invalidateEntry(eip);
    }

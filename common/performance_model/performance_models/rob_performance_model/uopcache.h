@@ -1,6 +1,7 @@
 #ifndef __UOPCACHE_H
 #define __UOPCACHE_H
 #define UOPDEBUG
+#include <math.h>
 #include <deque>
 #include "fixed_types.h"
 
@@ -9,7 +10,7 @@
 #define UOPCACHELINES 64000
 #define UOPWAYS 8
 #define UOPCONFLIMIT 0
-#define MAXVPINFO 10
+#define MAXVPINFO 8
 
 struct vpinfo
 {
@@ -72,6 +73,7 @@ class UopCache {
 	  bool setPredictable(intptr_t pc, unsigned long bbhead, unsigned long value);
 	  bool storeUopCache(unsigned long pc);
 	  bool checkVPinfo(unsigned long pc, unsigned long bbhead, unsigned long *value);
+	  uintptr_t GenNewPC(uintptr_t pc, unsigned long bbhead);
 	  std::tuple<bool, bool> getVPprediction(unsigned long pc, unsigned long bbhead, unsigned long value);
 	  bool AddVPinfo(unsigned long pc, unsigned long bbhead, unsigned long value);
 	  unsigned long getWay(unsigned long pc);
