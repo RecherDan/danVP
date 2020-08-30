@@ -146,8 +146,6 @@ bool UopCache::setPredictable(uintptr_t pc, unsigned long bbhead, unsigned long 
 }
 uintptr_t UopCache::GenNewPC(uintptr_t pc, unsigned long bbhead) {
 	if ( !this->uopenabled ) return pc;
-	unsigned long set = UopCache::getSet(bbhead);
-	int hitbank = UopCache::getWay(bbhead);
 	int index = UopCache::GetVPInfoIndex(pc, bbhead);
 	if ( index == -1 ) return pc;
 	int shift = int(log2 (MAXVPINFO));
